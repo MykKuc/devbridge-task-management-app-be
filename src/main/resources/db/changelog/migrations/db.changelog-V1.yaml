@@ -5,7 +5,7 @@ databaseChangeLog:
       comment: Sourcery admission tool's database
       changes:
         - createTable:
-            tableName: a_user
+            tableName: user
             columns:
               - column:
                   name: id
@@ -49,33 +49,8 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: user(id)
-        - createTable:
-            tableName: answer
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: text
-                  type: text
-                  constraints:
-                    nullable: false
-              - column:
-                  name: is_correct
-                  type: boolean
-                  constraints:
-                    nullable: false
-              - column:
-                  name: task_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: task(id)
+                    foreignKeyName: fk_user
+                    references: user(id)
         - createTable:
             tableName: task
             columns:
@@ -117,20 +92,49 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: category(id)
+                    foreignKeyName: fk_category
+                    references: category(id)
               - column:
                   name: author_id
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: user(id)
+                    foreignKeyName: fk_user
+                    references: user(id)
+        - createTable:
+            tableName: answer
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_correct
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_task
+                    references: task(id)
   - changeSet:
       id: 'MockData1'
       author: Karolina Ramaskaite's team
       comment: Mock data for Sourcery admission tool database
       changes:
         - insert:
-            tableName: a_user
+            tableName: user
             columns:
               - column:
                   name: id
@@ -143,7 +147,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  value: '11'
+                  value: '1'
               - column:
                   name: name
                   value: 'Logic'
@@ -157,26 +161,11 @@ databaseChangeLog:
                   name: author_id
                   value: '1'
         - insert:
-            tableName: answer
-            columns:
-              - column:
-                  name: id
-                  value: '111'
-              - column:
-                  name: text
-                  value: 'Blue'
-              - column:
-                  name: is_correct
-                  value: '1'
-              - column:
-                  name: task_id
-                  value: '1'
-        - insert:
             tableName: task
             columns:
               - column:
                   name: id
-                  value: '1111'
+                  value: '1'
               - column:
                   name: title
                   value: 'What is your favorite color?'
@@ -194,7 +183,22 @@ databaseChangeLog:
                   value: '1000000'
               - column:
                   name: category_id
-                  value: '11'
+                  value: '1'
               - column:
                   name: author_id
+                  value: '1'
+        - insert:
+            tableName: answer
+            columns:
+              - column:
+                  name: id
+                  value: '1'
+              - column:
+                  name: text
+                  value: 'Blue'
+              - column:
+                  name: is_correct
+                  value: '1'
+              - column:
+                  name: task_id
                   value: '1'
