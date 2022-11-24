@@ -1,18 +1,15 @@
-package com.BESourceryAdmissionTool.category.entity;
+package com.BESourceryAdmissionTool.category.requests;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class CategoryRequest {
 
-    private long id;
     private String name;
     private String description;
 }
