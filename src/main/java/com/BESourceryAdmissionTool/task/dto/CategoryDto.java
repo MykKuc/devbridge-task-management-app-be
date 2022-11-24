@@ -1,4 +1,4 @@
-package com.BESourceryAdmissionTool.task.projections;
+package com.BESourceryAdmissionTool.task.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
