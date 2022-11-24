@@ -1,9 +1,12 @@
 package com.BESourceryAdmissionTool.category.controllers;
 
+import com.BESourceryAdmissionTool.category.entity.CategoryRequest;
+import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,17 +28,11 @@ public class CategoryController {
     }
 
 
-    // Update the category.
     @PutMapping("/updatecategory/{id}")
-    public String updateCategory(@PathVariable("id") Long id, @RequestBody Category category){
-        if(categoryService.checkIfCategoryIdNotExist(id)){
-            return "Such an id of the category does not exist. Please enter valid id.";
-        }
-        String categoryName = category.getName();
-        String categoryDescription = category.getDescription();
+    @ResponseStatus(code = HttpStatus.OK, reason = "OK")
+    public String updateCategory(@PathVariable("id") Long id, @RequestBody CategoryRequest categoryRequest) throws CategoryIdNotExistException {
 
-        categoryService.updateCategoryService(categoryName,categoryDescription,id);
-
+        categoryService.updateCategoryService(id,categoryRequest);
         return "Category has been updated.";
     }
 }
