@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.category.services;
 
+import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -23,12 +25,15 @@ public class CategoryService {
         return categoryRepository.findAllOptions();
     }
 
-
-    public void updateCategoryService(Long id, CategoryRequest categoryRequest) throws CategoryIdNotExistException {
-        if(categoryRepository.findById(id).isEmpty()){
+    public void updateCategoryService(long id, CategoryRequest categoryRequest) {
+        Optional<Category> categoryOption = categoryRepository.findById(id);
+        if (categoryOption.isEmpty()) {
             throw new CategoryIdNotExistException(id);
         }
-        categoryRepository.save(categoryRequest);
+        Category category = categoryOption.get();
+        category.setName(categoryRequest.getName());
+        category.setDescription(categoryRequest.getDescription());
+        categoryRepository.save(category);
     }
 
 }
