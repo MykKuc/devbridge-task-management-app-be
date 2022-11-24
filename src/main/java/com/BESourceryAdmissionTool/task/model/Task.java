@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.task.model;
 
+import com.BESourceryAdmissionTool.category.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,9 @@ public class Task {
     private String description;
     private String summary;
     private Date creationDate;
-    private Integer score;
-    private long categoryId;
-    private long authorId;
+    private int score;
+    private Long authorId;
+
+    @ManyToOne
+    private Category category;
 }
