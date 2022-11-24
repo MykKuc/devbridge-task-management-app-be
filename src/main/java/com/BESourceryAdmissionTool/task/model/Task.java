@@ -1,12 +1,15 @@
 package com.BESourceryAdmissionTool.task.model;
 
 import com.BESourceryAdmissionTool.category.model.Category;
+import com.BESourceryAdmissionTool.task.model.Answer;
+import com.BESourceryAdmissionTool.task.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "task")
@@ -26,4 +29,10 @@ public class Task {
 
     @ManyToOne
     private Category category;
+
+    @ManyToOne
+    private User author;
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Answer> answers;
 }

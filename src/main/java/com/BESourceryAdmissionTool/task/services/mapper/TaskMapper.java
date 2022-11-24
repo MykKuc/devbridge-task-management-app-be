@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.task.services.mapper;
 
+import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.dto.CategoryDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;

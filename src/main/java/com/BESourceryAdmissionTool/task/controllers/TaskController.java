@@ -1,6 +1,7 @@
 package com.BESourceryAdmissionTool.task.controllers;
 
-import com.BESourceryAdmissionTool.task.projection.TaskData;
+import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
+import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public TaskData GetTaskData(@PathVariable("id") Long id) {
+    public FullTaskDto GetTaskData(@PathVariable("id") Long id) {
         return taskService.getTaskData(id);
     }
 
