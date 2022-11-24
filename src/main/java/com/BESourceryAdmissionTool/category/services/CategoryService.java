@@ -20,4 +20,18 @@ public class CategoryService {
     public List<CategoryOption> getAllCategories() {
         return categoryRepository.findAllOptions();
     }
+
+
+    // Method to update the Category.
+    public void updateCategoryService(String name, String description, Long id){
+        categoryRepository.updateCategoryDescription(description, id);
+        categoryRepository.updateCategoryName(name, id);
+    }
+
+    //Method to check if the id of the category is present.
+    public boolean checkIfCategoryIdNotExist(Long id){
+       return categoryRepository.findById(id).isEmpty();
+    }
+
+
 }
