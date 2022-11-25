@@ -25,7 +25,6 @@ public class Task {
     private String summary;
     private Date creationDate;
     private int score;
-    private Long authorId;
 
     @ManyToOne
     private Category category;
@@ -33,6 +32,6 @@ public class Task {
     @ManyToOne
     private User author;
 
-    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Answer.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "task")
     private List<Answer> answers;
 }

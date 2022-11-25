@@ -1,11 +1,13 @@
 package com.BESourceryAdmissionTool.task.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "answer")
@@ -19,7 +21,7 @@ public class Answer {
     private String text;
     private boolean isCorrect;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "task_id", nullable = false)
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
     private Task task;
 }

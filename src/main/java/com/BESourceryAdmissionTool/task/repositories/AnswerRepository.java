@@ -12,5 +12,5 @@ import java.util.List;
 @Transactional
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
-    List<Answer> findByTask(Task task);
+    List<Answer> findAnswerByTask(Task task);
 }
