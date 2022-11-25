@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("tasks/")
+@RequestMapping("tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -24,8 +25,8 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/{id}")
-    public FullTaskDto GetTaskData(@PathVariable("id") Long id) {
+    @GetMapping("{id}")
+    public Optional<FullTaskDto> getTaskData(@PathVariable("id") Long id) {
         return taskService.getTaskData(id);
     }
 
