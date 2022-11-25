@@ -14,6 +14,6 @@ public class TaskDto {
     private String summary;
     private Date creationDate;
     private int score;
-    private Long authorId;
+    private String authorId;
     private CategoryDto category;
 }

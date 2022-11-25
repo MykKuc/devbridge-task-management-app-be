@@ -16,7 +16,7 @@ public class TaskMapper {
                 task.getSummary(),
                 task.getCreationDate(),
                 task.getScore(),
-                task.getAuthor().getId(),
+                task.getAuthor().getName(),
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName())
         );
     }

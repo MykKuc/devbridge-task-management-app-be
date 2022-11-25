@@ -20,8 +20,4 @@ public class Answer {
     private long id;
     private String text;
     private boolean isCorrect;
-
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Task task;
 }

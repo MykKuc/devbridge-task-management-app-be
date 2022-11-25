@@ -2,6 +2,7 @@ package com.BESourceryAdmissionTool.task.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import com.BESourceryAdmissionTool.task.model.Answer;
 
 import java.util.List;
 import java.util.Date;
@@ -17,5 +18,5 @@ public class FullTaskDto {
     private int score;
     private UserDto user;
     private CategoryDto category;
-    private List<AnswersDto> answers;
+    private List<Answer> answers;
 }

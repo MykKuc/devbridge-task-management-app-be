@@ -2,6 +2,7 @@ package com.BESourceryAdmissionTool.task.services;
 
 import com.BESourceryAdmissionTool.task.dto.*;
 import com.BESourceryAdmissionTool.task.model.Task;
+import com.BESourceryAdmissionTool.task.model.Answer;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ public class TaskService {
 
     public FullTaskDto getTaskData(long id) {
         Task task = taskRepository.findTaskById(id);
-        List<AnswersDto> list = task.getAnswers().stream().map((answer) -> new AnswersDto(answer.getText(), answer.isCorrect())).collect(Collectors.toList());
         return new FullTaskDto(
                 task.getId(),
                 task.getTitle(),
@@ -33,7 +33,7 @@ public class TaskService {
                 task.getScore(),
                 new UserDto(task.getAuthor().getId(), task.getAuthor().getName()),
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName()),
-                list
+                task.getAnswers()
         );
     }
 

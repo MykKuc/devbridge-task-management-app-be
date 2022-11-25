@@ -32,6 +32,7 @@ public class Task {
     @ManyToOne
     private User author;
 
-    @OneToMany(targetEntity = Answer.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "task")
+    @OneToMany
+    @JoinColumn(name="task_id")
     private List<Answer> answers;
 }
