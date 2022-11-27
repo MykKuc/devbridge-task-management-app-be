@@ -1,10 +1,13 @@
 package com.BESourceryAdmissionTool.category.services;
 
+import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,5 +36,11 @@ public class CategoryService {
        return categoryRepository.findById(id).isEmpty();
     }
 
-
+    public long getCurrentUserId(){
+        // TODO: should be taken from currently logged in user's id when authentication is created
+        return 1;
+    }
+    public void createCategoryService(Category category){
+        categoryRepository.save(category);
+    }
 }

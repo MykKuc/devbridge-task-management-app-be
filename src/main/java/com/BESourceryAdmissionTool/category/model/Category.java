@@ -13,11 +13,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private long id;
+    @Column(name="name")
     private String name;
-    private Long authorId;
+    @Column(name="description")
     private String description;
+    @Column(name="creation_date")
     private Date creationDate;
+    @Column(name="author_id")
+    private long authorId;
 }
