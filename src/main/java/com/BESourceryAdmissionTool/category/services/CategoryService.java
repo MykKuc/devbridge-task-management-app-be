@@ -1,11 +1,15 @@
 package com.BESourceryAdmissionTool.category.services;
 
+import com.BESourceryAdmissionTool.category.model.Category;
+import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
+import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -21,17 +25,15 @@ public class CategoryService {
         return categoryRepository.findAllOptions();
     }
 
-
-    // Method to update the Category.
-    public void updateCategoryService(String name, String description, Long id){
-        categoryRepository.updateCategoryDescription(description, id);
-        categoryRepository.updateCategoryName(name, id);
+    public void updateCategoryService(long id, CategoryRequest categoryRequest) {
+        Optional<Category> categoryOption = categoryRepository.findById(id);
+        if (categoryOption.isEmpty()) {
+            throw new CategoryIdNotExistException(id);
+        }
+        Category category = categoryOption.get();
+        category.setName(categoryRequest.getName());
+        category.setDescription(categoryRequest.getDescription());
+        categoryRepository.save(category);
     }
-
-    //Method to check if the id of the category is present.
-    public boolean checkIfCategoryIdNotExist(Long id){
-       return categoryRepository.findById(id).isEmpty();
-    }
-
 
 }
