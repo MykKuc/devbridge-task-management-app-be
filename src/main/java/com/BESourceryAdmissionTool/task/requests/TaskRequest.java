@@ -14,6 +14,5 @@ public class TaskRequest {
     private String description;
     private String summary;
     private long categoryId;
-    private long authorId;
     private List<AnswerRequest> answers;
 }

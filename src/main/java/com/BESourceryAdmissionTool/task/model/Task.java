@@ -3,6 +3,7 @@ package com.BESourceryAdmissionTool.task.model;
 import com.BESourceryAdmissionTool.answer.model.Answer;
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.user.model.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ import java.util.List;
 @Builder
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
@@ -34,7 +35,7 @@ public class Task {
     @ManyToOne
     private User author;
 
-    @OneToMany
-    @JoinColumn(name="task_id")
+    @OneToMany(mappedBy = "task")
+    @JsonManagedReference
     private List<Answer> answers;
 }

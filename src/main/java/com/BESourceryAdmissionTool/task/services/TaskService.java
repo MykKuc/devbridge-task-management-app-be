@@ -5,7 +5,8 @@ import com.BESourceryAdmissionTool.answer.repositories.AnswerRepository;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
-import com.BESourceryAdmissionTool.task.dto.*;
+import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
+import com.BESourceryAdmissionTool.task.dto.TaskDto;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
@@ -17,7 +18,6 @@ import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,28 +62,16 @@ public class TaskService {
         }
         Category category = categoryOptional.get();
 
-        Optional<User> userOptional = userRepository.findById(taskRequest.getAuthorId());
+        Optional<User> userOptional = userRepository.findById(1L);
         if(userOptional.isEmpty()){
-            throw new UserNotFoundException(taskRequest.getAuthorId());
+            throw new UserNotFoundException(1L);
         }
         User author = userOptional.get();
 
-        Task task = Task.builder()
-                        .id(null)
-                        .title(taskRequest.getTitle())
-                        .description(taskRequest.getDescription())
-                        .summary(taskRequest.getSummary())
-                        .creationDate(new Date())
-                        .score(0)
-                        .category(category)
-                        .author(author)
-                        .answers(null)
-                        .build();
+        Task task = taskMapper.taskMap(taskRequest, category, author);
+        Task savedTask = taskRepository.save(task);
 
-        List<Answer> answers = taskRequest.getAnswers().stream().map(tr -> taskMapper.answerMap(tr, task.getId())).collect(Collectors.toList());
-
+        List<Answer> answers = taskRequest.getAnswers().stream().map(tr -> taskMapper.answerMap(tr, savedTask)).collect(Collectors.toList());
         answerRepository.saveAll(answers);
-        task.setAnswers(answers);
-        taskRepository.save(task);
     }
 }
