@@ -1,9 +1,10 @@
 package com.BESourceryAdmissionTool.task.model;
 
+import com.BESourceryAdmissionTool.answer.model.Answer;
 import com.BESourceryAdmissionTool.category.model.Category;
-import com.BESourceryAdmissionTool.task.model.Answer;
-import com.BESourceryAdmissionTool.task.model.User;
+import com.BESourceryAdmissionTool.user.model.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,10 +17,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String title;
     private String description;
     private String summary;

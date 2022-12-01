@@ -2,7 +2,7 @@ package com.BESourceryAdmissionTool.task.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import com.BESourceryAdmissionTool.task.model.Answer;
+import com.BESourceryAdmissionTool.answer.model.Answer;
 
 import java.util.List;
 import java.util.Date;

@@ -1,11 +1,8 @@
-package com.BESourceryAdmissionTool.task.model;
+package com.BESourceryAdmissionTool.answer.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -17,7 +14,9 @@ import javax.persistence.*;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String text;
     private boolean isCorrect;
+
+    private long task_id;
 }
