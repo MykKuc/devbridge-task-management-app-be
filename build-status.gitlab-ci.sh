@@ -48,8 +48,8 @@ function create_db() {
     else
         echo "Database does not exist. Creating new user and database..."
 
-        exec_psql "create user \"$USER\" with encrypted password \"$PASSWORD\";" &&
-        exec_psql "create database \"$USER\" with owner=\"$USER\"" &&
-        exec_psql "grant all privileges on database \"$USER\" to \"$USER\";"
+        exec_psql "create user $USER with encrypted password '$PASSWORD';" &&
+        exec_psql "create database $USER with owner=$USER" &&
+        exec_psql "grant all privileges on database $USER to $USER;"
     fi
 }

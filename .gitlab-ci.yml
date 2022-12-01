@@ -1,7 +1,7 @@
 variables:
   # Change
-  TEAM_NAME: "kns-kr-team"
-  HOST: "admission-tool.devbstaging.com"
+  TEAM_NAME: "admission-tool"
+  HOST: "admission-toolbe.devbstaging.com"
   DEPLOYMENT_BRANCH: "master"
 
   # TODO: add DB_PASSWORD variable to pipeline
