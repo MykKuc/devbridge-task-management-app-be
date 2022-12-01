@@ -1,6 +1,6 @@
 package com.BESourceryAdmissionTool.category.controllers;
 
-import com.BESourceryAdmissionTool.category.projection.CategoryOption;
+import com.BESourceryAdmissionTool.category.dto.CategoryDto;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryOption> GetAllCategories() {
+    public CategoryDto GetAllCategories() {
         return categoryService.getAllCategories();
     }
 
