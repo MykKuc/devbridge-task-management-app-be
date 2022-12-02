@@ -3,6 +3,8 @@ databaseChangeLog:
       id: 'SAT-DB1'
       author: Karolina Ramaskaite's team
       comment: Sourcery admission tool's database
+      validCheckSum:
+        - 8:3f68a2339bfc686be860eb63b8f4e5d0
       changes:
         - createTable:
             tableName: user
@@ -132,22 +134,18 @@ databaseChangeLog:
       id: 'MockData1'
       author: Karolina Ramaskaite's team
       comment: Mock data for Sourcery admission tool database
+      validCheckSum:
+        - 8:3f68a2339bfc686be860eb63b8f4e5d0
       changes:
         - insert:
             tableName: user
             columns:
-              - column:
-                  name: id
-                  value: '1'
               - column:
                   name: name
                   value: 'petras'
         - insert:
             tableName: category
             columns:
-              - column:
-                  name: id
-                  value: '1'
               - column:
                   name: name
                   value: 'Logic'
@@ -164,8 +162,6 @@ databaseChangeLog:
             tableName: task
             columns:
               - column:
-                  name: id
-                  value: '1'
               - column:
                   name: title
                   value: 'What is your favorite color?'
@@ -190,9 +186,6 @@ databaseChangeLog:
         - insert:
             tableName: answer
             columns:
-              - column:
-                  name: id
-                  value: '1'
               - column:
                   name: text
                   value: 'Blue'
