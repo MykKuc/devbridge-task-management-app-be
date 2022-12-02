@@ -129,25 +129,19 @@ databaseChangeLog:
                     foreignKeyName: fk_task
                     references: task(id)
   - changeSet:
-      id: 'MockData2'
+      id: 'MockData1'
       author: Karolina Ramaskaite's team
       comment: Mock data for Sourcery admission tool database
       changes:
         - insert:
             tableName: user
             columns:
-#              - column:
-#                  name: id
-#                  value: '1'
               - column:
                   name: name
                   value: 'petras'
         - insert:
             tableName: category
             columns:
-#              - column:
-#                  name: id
-#                  value: '1'
               - column:
                   name: name
                   value: 'Logic'
@@ -163,9 +157,6 @@ databaseChangeLog:
         - insert:
             tableName: task
             columns:
-#              - column:
-#                  name: id
-#                  value: '1'
               - column:
                   name: title
                   value: 'What is your favorite color?'
@@ -190,9 +181,6 @@ databaseChangeLog:
         - insert:
             tableName: answer
             columns:
-#              - column:
-#                  name: id
-#                  value: '1'
               - column:
                   name: text
                   value: 'Blue'

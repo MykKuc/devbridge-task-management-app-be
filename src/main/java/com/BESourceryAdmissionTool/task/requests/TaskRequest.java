@@ -31,7 +31,9 @@ public class TaskRequest {
 
     // custom summary setter for validation
     public void setSummary(String summary){
-        this.summary = summary.trim();
+        if(summary != null){
+            this.summary = summary.trim();
+        }
     }
 
     private long categoryId;
