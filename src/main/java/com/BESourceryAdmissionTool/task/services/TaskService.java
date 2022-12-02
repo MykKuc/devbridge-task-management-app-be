@@ -7,6 +7,7 @@ import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
+import com.BESourceryAdmissionTool.task.exceptions.TaskNameAlreadyExistsException;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
@@ -16,6 +17,7 @@ import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public class TaskService {
 
     public Optional<FullTaskDto> getTaskData(long id) {
         Optional<Task> task = taskRepository.findTaskById(id);
-        if (task.isEmpty()){
+        if (task.isEmpty()) {
             throw new TaskNotFoundException("Task not found");
         }
         return task.map(taskMapper::fullTaskMap);
@@ -55,21 +57,32 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public void createTask(TaskRequest taskRequest){
+    public void createTask(TaskRequest taskRequest) {
+        Optional<Task> sameTitle = taskRepository.findTaskByTitle(taskRequest.getTitle());
+        if (sameTitle.isPresent()){
+            throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
+        }
+
         Optional<Category> categoryOptional = categoryRepository.findById(taskRequest.getCategoryId());
-        if(categoryOptional.isEmpty()){
+        if (categoryOptional.isEmpty()) {
             throw new CategoryIdNotExistException(taskRequest.getCategoryId());
         }
         Category category = categoryOptional.get();
 
         Optional<User> userOptional = userRepository.findById(1L);
-        if(userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             throw new UserNotFoundException(1L);
         }
         User author = userOptional.get();
 
         Task task = taskMapper.taskMap(taskRequest, category, author);
-        Task savedTask = taskRepository.save(task);
+        Task savedTask;
+        try{
+            savedTask = taskRepository.save(task);
+        }
+        catch (DataIntegrityViolationException ex){
+            throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
+        }
 
         List<Answer> answers = taskRequest.getAnswers().stream().map(tr -> taskMapper.answerMap(tr, savedTask)).collect(Collectors.toList());
         answerRepository.saveAll(answers);
