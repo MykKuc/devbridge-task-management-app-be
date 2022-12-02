@@ -48,7 +48,7 @@ public class CategoryController {
         return "Category has been updated.";
     }
 
-    @PostMapping("/createcategory/")
+    @PostMapping
     public void createCategory(String name, String description){
         long authorId = categoryService.getCurrentUserId();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,7 +67,5 @@ public class CategoryController {
         category.setCreationDate(currentDate);
 
         categoryService.createCategoryService(category);
-
-        //return new ResponseEntity("Created", HttpStatus.CREATED);
     }
 }

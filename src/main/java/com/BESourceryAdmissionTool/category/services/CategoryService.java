@@ -41,6 +41,8 @@ public class CategoryService {
         return 1;
     }
     public void createCategoryService(Category category){
-        categoryRepository.save(category);
+        //categoryRepository.save(category);
+        //categoryRespoistory.insertCategory(category);
+        categoryRepository.insertCategory(category.getName(), category.getDescription(), category.getCreationDate(), category.getAuthorId());
     }
 }
