@@ -1,8 +1,6 @@
 package com.BESourceryAdmissionTool.task.model;
 
 import com.BESourceryAdmissionTool.category.model.Category;
-import com.BESourceryAdmissionTool.task.model.Answer;
-import com.BESourceryAdmissionTool.task.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +28,7 @@ public class Task {
     private Category category;
 
     @ManyToOne
-    private User author;
+    private UserEntity author;
 
     @OneToMany
     @JoinColumn(name="task_id")
