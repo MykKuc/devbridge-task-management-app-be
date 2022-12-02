@@ -46,6 +46,7 @@ build_app:
   image: openjdk:16-alpine
   script:
     - cd git-clone
+    - chmod +x ./gradlew
     - ./gradlew clean build
   artifacts:
     paths:
