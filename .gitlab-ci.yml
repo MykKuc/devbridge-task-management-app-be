@@ -43,7 +43,7 @@ clone:
 
 build_app:
   stage: build_app
-  image: openjdk:16-alpine
+  image: openjdk:17-alpine
   script:
     - cd git-clone
     - chmod +x ./gradlew
