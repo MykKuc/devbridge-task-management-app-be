@@ -29,13 +29,13 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers().permitAll()
                 .antMatchers("/api/user/login").permitAll()
 
-                .anyRequest().permitAll()
-                .and().formLogin();
+                .anyRequest().permitAll();
+
         return http.build();
     }
     @Bean

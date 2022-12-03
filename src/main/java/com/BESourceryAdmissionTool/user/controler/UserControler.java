@@ -37,7 +37,7 @@ public class UserControler {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
-        return new ResponseEntity<>("it is okay ",HttpStatus.OK);
+        return new ResponseEntity<>("Log in ",HttpStatus.OK);
 
 
     }
