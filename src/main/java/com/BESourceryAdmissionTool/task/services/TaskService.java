@@ -37,4 +37,8 @@ public class TaskService {
                 .map(taskMapper::taskMap)
                 .collect(Collectors.toList());
     }
+
+    public void updateTask(long id, Task task){
+        taskRepository.findTaskById(id);
+    }
 }

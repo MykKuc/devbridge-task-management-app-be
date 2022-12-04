@@ -35,4 +35,9 @@ public class TaskController {
     public List<TaskDto> getAllTasks() {
         return taskService.getAllTasks();
     }
+
+    @PutMapping(path = "{id}")
+    public void updateTaskById(@PathVariable("id") long id, @RequestBody Task taskToUpdate) {
+        taskService.updateTask(id, taskToUpdate);
+    }
 }
