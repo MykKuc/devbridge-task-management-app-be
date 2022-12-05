@@ -137,17 +137,11 @@ databaseChangeLog:
             tableName: user
             columns:
               - column:
-                  name: id
-                  value: '1'
-              - column:
                   name: name
                   value: 'petras'
         - insert:
             tableName: category
             columns:
-              - column:
-                  name: id
-                  value: '1'
               - column:
                   name: name
                   value: 'Logic'
@@ -164,8 +158,6 @@ databaseChangeLog:
             tableName: task
             columns:
               - column:
-                  name: id
-                  value: '1'
               - column:
                   name: title
                   value: 'What is your favorite color?'
@@ -190,9 +182,6 @@ databaseChangeLog:
         - insert:
             tableName: answer
             columns:
-              - column:
-                  name: id
-                  value: '1'
               - column:
                   name: text
                   value: 'Blue'
