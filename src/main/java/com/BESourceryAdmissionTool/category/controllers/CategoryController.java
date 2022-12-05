@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.category.controllers;
 
+import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.dto.CategoryDto;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.services.CategoryService;
@@ -21,6 +22,11 @@ public class CategoryController {
     }
 
     @GetMapping
+    public List<CategoryOption> GetCategoriesOptions() {
+        return categoryService.getCategoriesOptions();
+    }
+
+    @GetMapping("/all")
     public CategoryDto GetAllCategories() {
         return categoryService.getAllCategories();
     }

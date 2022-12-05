@@ -14,9 +14,4 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Optional<Task> findTaskById(long id);
-
-    @Query("UPDATE task SET title=#{task.title}, description=#{task.description}, " +
-            "summary=#{task.summary}, score=#{task.score}, category_id=#{task.category.id}, author_id=#{task.author.id} WHERE id=#{task.id}")
-    int update(@Param("task") Task task);
-
 }
