@@ -26,7 +26,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: password
-                  type: varchar(50)
+                  type: varchar(70)
                   constraints:
                     nullable: false
               - column:
@@ -162,7 +162,7 @@ databaseChangeLog:
                   value: 'petras@gmail.com'
               - column:
                   name: password
-                  value: 'slaptazodis'
+                  value: '$2a$12$G6L1IcLdhSix3KcKMJPdve2N/rQ8XMAUH9yGZYlsII/cJya6cSzv6'
               - column:
                   name: token
                   value: null
