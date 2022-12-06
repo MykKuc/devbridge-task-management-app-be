@@ -37,4 +37,10 @@ public class CategoryController {
     public void updateCategory(@PathVariable("id") long id, @RequestBody CategoryRequest categoryRequest) {
         categoryService.updateCategoryService(id, categoryRequest);
     }
+
+    @PostMapping
+    @ResponseStatus(code=HttpStatus.CREATED, reason = "CREATED")
+    public void createCategory(@RequestBody CategoryRequest categoryRequest){
+        categoryService.createCategoryService(categoryRequest);
+    }
 }
