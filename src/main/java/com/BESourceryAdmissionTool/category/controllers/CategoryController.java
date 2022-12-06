@@ -1,6 +1,5 @@
 package com.BESourceryAdmissionTool.category.controllers;
 
-import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.services.CategoryService;
@@ -8,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,8 +33,8 @@ public class CategoryController {
     }
 
     @PostMapping
-    public void createCategory(String name, String description){
-        categoryService.createCategoryService(name, description);
-
+    @ResponseStatus(code=HttpStatus.CREATED, reason = "CREATED")
+    public void createCategory(@RequestBody CategoryRequest categoryRequest){
+        categoryService.createCategoryService(categoryRequest);
     }
 }

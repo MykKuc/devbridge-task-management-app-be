@@ -16,8 +16,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c FROM Category c")
     List<CategoryOption> findAllOptions();
-
-    @Modifying
-    @Query(value = "INSERT INTO category (name, description, creation_date, author_id) VALUES(:name,:description,:creationDate,:authorId)", nativeQuery = true)
-    void insertCategory(@Param("name")String name, @Param("description")String description, @Param("creationDate") Date creationDate, @Param("authorId")long authorId);
 }

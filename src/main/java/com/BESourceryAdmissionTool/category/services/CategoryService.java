@@ -1,17 +1,14 @@
 package com.BESourceryAdmissionTool.category.services;
 
-import com.BESourceryAdmissionTool.category.model.Category;
-import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
+import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
+import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -41,25 +38,18 @@ public class CategoryService {
         categoryRepository.save(category);
     }
     @Transactional
-    public void createCategoryService(String name, String description){
+    public void createCategoryService(CategoryRequest categoryRequest){
         long authorId = 1; // TODO: should be taken from currently logged in user's id when authentication is created
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date currentDate=new Date();
-        try{
-            currentDate = formatter.parse(formatter.format(currentDate));
-        }
-        catch (ParseException e){
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        }
-        Category category = new Category();
 
-        category.setName(name);
-        category.setDescription(description);
-        category.setAuthorId(authorId);
-        category.setCreationDate(currentDate);
 
-        //categoryRepository.save(category);
-        //categoryRespoistory.insertCategory(category);
-        categoryRepository.insertCategory(category.getName(), category.getDescription(), category.getCreationDate(), category.getAuthorId());
+        Category category = Category.builder()
+                .name(categoryRequest.getName())
+                .description(categoryRequest.getDescription())
+                .authorId(authorId)
+                .creationDate(currentDate)
+                .build();
+
+        categoryRepository.save(category);
     }
 }
