@@ -21,12 +21,12 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping("/options")
     public List<CategoryOption> GetCategoriesOptions() {
         return categoryService.getCategoriesOptions();
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public CategoryDto GetAllCategories() {
         return categoryService.getAllCategories();
     }
