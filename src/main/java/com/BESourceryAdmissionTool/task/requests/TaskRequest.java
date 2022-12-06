@@ -17,11 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 public class TaskRequest {
 
-    @NotBlank(message = "Title must not be null and must contain at least 5 non-whitespace characters")
+    @NotBlank(message = "Title must not be null and must contain at least one non-whitespace character")
     @Length(min = 5, max = 50, message = "Title must be between 5 and 50 characters")
     private String title;
 
-    @NotBlank(message = "Description must not be null and must contain at least 40 non-whitespace characters")
+    @NotBlank(message = "Description must not be null and must contain at least one non-whitespace character")
     @Length(min = 40, message = "Description must be at least 40 characters")
     private String description;
 
