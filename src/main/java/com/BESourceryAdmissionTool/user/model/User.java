@@ -1,11 +1,10 @@
-package com.BESourceryAdmissionTool.task.model;
+package com.BESourceryAdmissionTool.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "user", schema = "public")
@@ -14,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
 }
