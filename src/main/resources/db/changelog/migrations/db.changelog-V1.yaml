@@ -158,7 +158,6 @@ databaseChangeLog:
             tableName: task
             columns:
               - column:
-              - column:
                   name: title
                   value: 'What is your favorite color?'
               - column:
