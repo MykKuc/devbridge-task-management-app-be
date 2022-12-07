@@ -57,6 +57,15 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteTask(long id) {
+        Optional<Task> task = taskRepository.findTaskById(id);
+        if (task.isEmpty()) {
+            throw new TaskNotFoundException("Task not found");
+        }
+        answerRepository.deleteAnswersByTask(task.get());
+        taskRepository.deleteById(id);
+    }
+
     public void createTask(TaskRequest taskRequest) {
         Optional<Task> sameTitle = taskRepository.findTaskByTitle(taskRequest.getTitle());
         if (sameTitle.isPresent()){
