@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
 
     @Autowired
@@ -34,5 +35,10 @@ public class UserService {
             throw new UserNotFoundException(id);
         }
         return user;
+    }
+
+    public void createUser(User user) {
+        userRepository.save(user);
+
     }
 }
