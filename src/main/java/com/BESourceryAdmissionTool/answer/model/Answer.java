@@ -1,11 +1,10 @@
-package com.BESourceryAdmissionTool.task.model;
+package com.BESourceryAdmissionTool.answer.model;
 
+import com.BESourceryAdmissionTool.task.model.Task;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -16,8 +15,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Answer {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String text;
     private boolean isCorrect;
+
+    @JsonBackReference
+    @JoinColumn(name="task_id")
+    @ManyToOne
+    private Task task;
 }
