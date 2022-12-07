@@ -1,4 +1,4 @@
-package com.BESourceryAdmissionTool.task.model;
+package com.BESourceryAdmissionTool.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

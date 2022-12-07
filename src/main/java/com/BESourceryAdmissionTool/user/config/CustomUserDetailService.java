@@ -1,7 +1,7 @@
 package com.BESourceryAdmissionTool.user.config;
 
 
-import com.BESourceryAdmissionTool.task.model.User;
+import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
