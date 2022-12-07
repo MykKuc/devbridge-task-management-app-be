@@ -6,6 +6,7 @@ import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,10 @@ public class TaskController {
     public void createTask(@Valid @RequestBody TaskRequest taskRequest) {
         taskService.createTask(taskRequest);
     }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT, reason = "Deleted")
+    public void deleteTask(@PathVariable("id") Long id) { taskService.deleteTask(id);}
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
