@@ -46,7 +46,6 @@ public class TaskController {
     }
 
     @DeleteMapping("{id}")
-    @Transactional
     @ResponseStatus(code = HttpStatus.NO_CONTENT, reason = "Deleted")
     public void deleteTask(@PathVariable("id") Long id) { taskService.deleteTask(id);}
 
