@@ -31,7 +31,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: token
-                  type: varchar(50)
+                  type: varchar(200)
                   constraints:
                     nullable: true
         - createTable:

@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,17 +37,13 @@ public class UserController {
     }
 
 
-
-
-
-
     @GetMapping("{id}")
-    public Optional<User> getUser(@PathVariable("id") Long id){
+    public Optional<User> getUser(@PathVariable("id") Long id) {
         return userService.getUser(id);
     }
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponse> AuthenticateUser(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<AuthResponse> AuthenticateUser(@RequestBody LoginDto loginDto) throws Exception {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -56,16 +51,12 @@ public class UserController {
                         loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtMaker.generateToken(authentication);
+        userService.storeJWt(loginDto.getEmail(), token);
 
 
         return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
 
     }
 
-    @PutMapping("logout")
-    public String deleteJwt(@AuthenticationPrincipal User user){
 
-
-
-        return "ok";
-}}
+}

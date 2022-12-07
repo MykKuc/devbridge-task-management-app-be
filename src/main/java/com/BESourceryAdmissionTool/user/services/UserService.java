@@ -17,6 +17,17 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public void storeJWt(String email, String token) throws Exception {
+       Optional<User> userOptional =userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            throw new Exception();
+        }
+        User user=userOptional.get();
+        user.setToken(token);
+        userRepository.save(user);
+
+    }
+
     public Optional<User> getUser(long id) {
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()){
