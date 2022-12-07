@@ -15,7 +15,7 @@ import java.util.HashSet;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity  implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -24,10 +24,7 @@ public class UserEntity  implements UserDetails {
     private String password;
     private String token;
 
-    public UserEntity(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

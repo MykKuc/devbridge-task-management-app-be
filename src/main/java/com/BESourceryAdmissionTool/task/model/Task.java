@@ -28,7 +28,7 @@ public class Task {
     private Category category;
 
     @ManyToOne
-    private UserEntity author;
+    private User author;
 
     @OneToMany
     @JoinColumn(name="task_id")

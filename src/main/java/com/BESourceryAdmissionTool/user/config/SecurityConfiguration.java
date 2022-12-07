@@ -1,43 +1,50 @@
 package com.BESourceryAdmissionTool.user.config;
 
-import org.apache.commons.lang3.ObjectUtils;
+import com.BESourceryAdmissionTool.user.security.JwtAuthFilter;
+import com.BESourceryAdmissionTool.user.security.JwtEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import javax.servlet.http.HttpFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
     private CustomUserDetailService customUserDetailService;
+    private JwtEntryPoint AuthEntryPoint;
     @Autowired
-    public SecurityConfiguration(CustomUserDetailService customUserDetailService) {
+    public SecurityConfiguration(CustomUserDetailService customUserDetailService, JwtEntryPoint authEntryPoint) {
         this.customUserDetailService = customUserDetailService;
+        AuthEntryPoint = authEntryPoint;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(AuthEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                .antMatchers().permitAll()
-                .antMatchers("/api/user/login").authenticated()
-
-                .anyRequest().permitAll();
+                .antMatchers("/api/user/login").permitAll()
+                .anyRequest().permitAll()
+            .and()
+                .httpBasic();
+        http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -49,6 +56,10 @@ public class SecurityConfiguration {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public JwtAuthFilter jwtAuthFilter(){
+        return  new JwtAuthFilter();
     }
 }
 
