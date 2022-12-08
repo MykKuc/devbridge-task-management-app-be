@@ -4,6 +4,7 @@ import com.BESourceryAdmissionTool.user.dto.AuthResponse;
 import com.BESourceryAdmissionTool.user.dto.LoginDto;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
+import com.BESourceryAdmissionTool.user.request.UserRequest;
 import com.BESourceryAdmissionTool.user.security.JwtMaker;
 import com.BESourceryAdmissionTool.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +60,9 @@ public class UserController {
     }
 
     @PostMapping
-    public void addUser(@RequestBody User user){
-        userService.createUser(user);
+    @ResponseStatus(code=HttpStatus.CREATED, reason = "created")
+    public void addUser(@RequestBody UserRequest userRequest){
+        userService.createUser(userRequest);
     }
 
 }

@@ -1,8 +1,10 @@
 package com.BESourceryAdmissionTool.user.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,22 +20,30 @@ import java.util.HashSet;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NotNull
     @NotBlank
+    @Length(min = 1,max = 50,message = "Incorrect Length of a name")
     private String name;
 
+    @NotNull
     @NotBlank
-    @Pattern(regexp = "![CDATA[^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$]]")
+    @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$")
+    @Length(min = 1,max = 50,message = "Incorrect Length of a name")
     private String email;
 
+    @NotNull
     @NotBlank
-    @Pattern(regexp = "\"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$\"")
+    @Pattern(regexp = "^(?=.*[0-9]).{6,}")
+    @Length(min = 1,max = 70,message = "Incorrect Length of a name")
     private String password;
+
     private String token;
 
 
