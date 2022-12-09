@@ -6,6 +6,7 @@ import com.BESourceryAdmissionTool.task.dto.*;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
+import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,6 @@ public class TaskMapper {
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName())
         );
     }
-
-    public UpdateTaskDto taskMap()
 
     public Task taskMap(TaskRequest taskRequest, Category category, User author){
         return Task.builder()
@@ -56,13 +55,8 @@ public class TaskMapper {
         );
     }
 
-    public Answer answerMap(AnswerRequest answerRequest, Task task){
-        return new Answer(
-                null,
-                answerRequest.getText(),
-                answerRequest.isCorrect(),
-                task
-        );
+    public Answer answerMap(String text, boolean isCorrect, Task task){
+        return new Answer(null, text, isCorrect, task);
     }
 
 }

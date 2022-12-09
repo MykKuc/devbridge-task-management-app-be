@@ -7,7 +7,8 @@ import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
-import com.BESourceryAdmissionTool.task.dto.UpdateTaskDto;
+import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
+import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNameAlreadyExistsException;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.model.Task;
@@ -94,30 +95,39 @@ public class TaskService {
             throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
         }
 
-        List<Answer> answers = taskRequest.getAnswers().stream().map(tr -> taskMapper.answerMap(tr, savedTask)).collect(Collectors.toList());
-        answerRepository.saveAll(answers);
+        addAnswersForTask(taskRequest.getAnswers(), savedTask);
     }
 
-    public void updateTask(long id, UpdateTaskDto taskToUpdate){
+    public void updateTask(long id, UpdateTaskRequest request){
         Optional<Task> primaryTask = taskRepository.findTaskById(id);
         if(primaryTask.isEmpty()){
             throw new TaskNotFoundException("Task was not found");
         }
 
-        Optional<Category> categoryOptional = categoryRepository.findById(taskToUpdate.getId());
-        if (categoryOptional.isEmpty()) {
-            throw new CategoryIdNotExistException(taskToUpdate.getId());
+        Task task = primaryTask.get();
+
+        answerRepository.deleteAnswersByTask(task);
+
+        task.setDescription(request.getDescription());
+        task.setSummary(request.getSummary());
+        task.setTitle(request.getTitle());
+
+        if (request.getCategoryId() != task.getCategory().getId()) {
+            Optional<Category> categoryOptional = categoryRepository.findById(request.getCategoryId());
+            if (categoryOptional.isEmpty()) {
+                throw new CategoryIdNotExistException(request.getCategoryId());
+            }
+            task.setCategory(categoryOptional.get());
         }
 
-        UpdateTaskDto updateTaskDto = taskMapper.taskMap(taskToUpdate);
-        Task savedTask = taskRepository.save(updateTaskDto);
+        Task savedTask = taskRepository.save(task);
+        addAnswersForTask(request.getAnswers(), savedTask);
+    }
 
-
-
-
-
-
-
-
+    private void addAnswersForTask(List<AnswerRequest> answerRequest, Task savedTask) {
+        List<Answer> answers = answerRequest.stream()
+                .map(tr -> taskMapper.answerMap(tr.getText(), tr.isCorrect(), savedTask))
+                .collect(Collectors.toList());
+        answerRepository.saveAll(answers);
     }
 }

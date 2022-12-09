@@ -1,4 +1,4 @@
-package com.BESourceryAdmissionTool.task.dto;
+package com.BESourceryAdmissionTool.task.requests;
 
 import com.BESourceryAdmissionTool.answer.model.Answer;
 import lombok.AllArgsConstructor;
@@ -8,11 +8,11 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class UpdateTaskDto {
+public class UpdateTaskRequest {
     private long id;
     private String title;
     private String description;
     private String summary;
-    private CategoryDto category;
-    private List<Answer> answers;
+    private long categoryId;
+    private List<AnswerRequest> answers;
 }
