@@ -28,12 +28,12 @@ public class UserService {
 
     }
 
-    public void deleteJWt(String token) {
-        Optional<User> userOptional = userRepository.findByToken(token);
-        User user = userOptional.get();
+    public void deleteToken(User user) {
+        if (user == null || user.getToken() == null) {
+            throw new RuntimeException("User not found");
+        }
         user.setToken(null);
         userRepository.save(user);
-
     }
 
     public Optional<User> getUser(long id) {

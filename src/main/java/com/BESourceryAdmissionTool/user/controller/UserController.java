@@ -1,9 +1,8 @@
 package com.BESourceryAdmissionTool.user.controller;
 
 import com.BESourceryAdmissionTool.user.dto.AuthResponse;
-import com.BESourceryAdmissionTool.user.dto.LoginDto;
+import com.BESourceryAdmissionTool.user.request.LoginRequest;
 import com.BESourceryAdmissionTool.user.model.User;
-import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import com.BESourceryAdmissionTool.user.security.JwtMaker;
 import com.BESourceryAdmissionTool.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +19,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("users")
 public class UserController {
     private final UserService userService;
-    private AuthenticationManager authenticationManager;
-
-    private JwtMaker jwtMaker;
-    private UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtMaker jwtMaker;
 
 
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtMaker jwtMaker, UserRepository userRepository) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtMaker jwtMaker) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtMaker = jwtMaker;
-        this.userRepository = userRepository;
     }
 
 
@@ -45,15 +40,15 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponse> AuthenticateUser(@RequestBody LoginDto loginDto) throws Exception {
+    public ResponseEntity<AuthResponse> authenticateUser(@RequestBody LoginRequest loginRequest) throws Exception {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDto.getEmail(),
-                        loginDto.getPassword()));
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtMaker.generateToken(authentication);
-        userService.storeJWt(loginDto.getEmail(), token);
+        userService.storeJWt(loginRequest.getEmail(), token);
 
 
         return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
@@ -61,9 +56,9 @@ public class UserController {
     }
 
     @PutMapping("logout")
-    public ResponseEntity<String > deleteJwt(@RequestHeader(HttpHeaders.AUTHORIZATION) String str) throws Exception {
-        userService.deleteJWt(str);
-
-        return new ResponseEntity<String>(HttpStatus.NO_CONTENT );
+    public ResponseEntity<String > deleteToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                                               @AuthenticationPrincipal User user) throws Exception {
+        userService.deleteToken(user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

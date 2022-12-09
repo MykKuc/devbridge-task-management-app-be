@@ -1,10 +1,9 @@
 package com.BESourceryAdmissionTool.user.security;
 
-import com.BESourceryAdmissionTool.user.config.CustomUserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.BESourceryAdmissionTool.user.model.User;
+import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,26 +13,31 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 
-    @Autowired
-    private JwtMaker tokenMaker;
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
+    private final JwtMaker tokenMaker;
+    private final UserRepository userRepository;
 
-
+    public JwtAuthFilter(JwtMaker tokenMaker, UserRepository userRepository) {
+        this.tokenMaker = tokenMaker;
+        this.userRepository = userRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getJWTFromRequest(request);
         if(StringUtils.hasText(token) && tokenMaker.validateToken(token)) {
-            String username = tokenMaker.getUsernameFromJWT(token);
+            String email = tokenMaker.getUsernameFromJWT(token);
 
-            UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null,
-                    userDetails.getAuthorities());
+            Optional<User> user = this.userRepository.findByEmail(email);
+            if (user.isEmpty()) {
+                throw new RuntimeException("User not found");
+            }
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.get(), null,
+                    user.get().getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
