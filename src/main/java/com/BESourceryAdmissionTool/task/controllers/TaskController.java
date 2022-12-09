@@ -2,6 +2,7 @@ package com.BESourceryAdmissionTool.task.controllers;
 
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
+import com.BESourceryAdmissionTool.task.dto.UpdateTaskDto;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class TaskController {
     @ResponseStatus(code = HttpStatus.CREATED, reason = "Created")
     public void createTask(@Valid @RequestBody TaskRequest taskRequest) {
         taskService.createTask(taskRequest);
+    }
+
+    @PutMapping(path ="{id}")
+    public void updateTask(@PathVariable("id") long id, @RequestBody UpdateTaskDto taskToUpdate){
+        taskService.updateTask(id, taskToUpdate);
     }
 
     @DeleteMapping("{id}")

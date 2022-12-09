@@ -7,6 +7,7 @@ import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
+import com.BESourceryAdmissionTool.task.dto.UpdateTaskDto;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNameAlreadyExistsException;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.model.Task;
@@ -95,5 +96,28 @@ public class TaskService {
 
         List<Answer> answers = taskRequest.getAnswers().stream().map(tr -> taskMapper.answerMap(tr, savedTask)).collect(Collectors.toList());
         answerRepository.saveAll(answers);
+    }
+
+    public void updateTask(long id, UpdateTaskDto taskToUpdate){
+        Optional<Task> primaryTask = taskRepository.findTaskById(id);
+        if(primaryTask.isEmpty()){
+            throw new TaskNotFoundException("Task was not found");
+        }
+
+        Optional<Category> categoryOptional = categoryRepository.findById(taskToUpdate.getId());
+        if (categoryOptional.isEmpty()) {
+            throw new CategoryIdNotExistException(taskToUpdate.getId());
+        }
+
+        UpdateTaskDto updateTaskDto = taskMapper.taskMap(taskToUpdate);
+        Task savedTask = taskRepository.save(updateTaskDto);
+
+
+
+
+
+
+
+
     }
 }
