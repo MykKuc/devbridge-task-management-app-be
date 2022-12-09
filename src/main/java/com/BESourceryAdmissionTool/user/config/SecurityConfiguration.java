@@ -5,6 +5,7 @@ import com.BESourceryAdmissionTool.user.security.JwtEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,6 +33,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+       .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class).anonymous().and()
                 .csrf().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(AuthEntryPoint)
@@ -40,11 +42,11 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/user/login").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/**").anonymous()
                 .anyRequest().permitAll()
             .and()
                 .httpBasic();
-        http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
