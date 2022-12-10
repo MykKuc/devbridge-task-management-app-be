@@ -6,7 +6,6 @@ import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("tasks")
 public class TaskController {
 

@@ -1,7 +1,7 @@
 variables:
   # Change
   TEAM_NAME: "admission"
-  HOST: "admission-toolbe.devbstaging.com"
+  HOST: "admission-tool.devbstaging.com"
   DEPLOYMENT_BRANCH: "master"
 
   # TODO: add DB_PASSWORD variable to pipeline
@@ -9,7 +9,7 @@ variables:
   DB_TYPE: "postgresql"
 
   # DO NOT CHANGE
-  IMAGE_NAME: $ACR_URL/$TEAM_NAME/backend
+  IMAGE_NAME: $ACR_URL/$TEAM_NAME/backend:latest
 
 
 image: docker:latest
@@ -61,6 +61,7 @@ build:
   script:
     - cd git-clone
     - docker build -t $IMAGE_NAME .
+    - if [[ ! "$PR_STATUS" == "MERGED" && "$TARGET_BRANCH_NAME" == "$DEPLOYMENT_BRANCH" ]]; then exit 0;fi
     - docker push $IMAGE_NAME
 
 deploy:
