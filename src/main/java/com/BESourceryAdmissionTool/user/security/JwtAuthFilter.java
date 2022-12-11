@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.user.security;
 
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             Optional<User> user = this.userRepository.findByEmail(email);
             if (user.isEmpty()) {
-                throw new RuntimeException("User not found");
+                throw new UnauthorizedExeption("User does not exist");
             }
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.get(), null,
                     user.get().getAuthorities());

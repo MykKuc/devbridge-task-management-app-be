@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.user.config;
 
+import com.BESourceryAdmissionTool.user.security.PasswordEncoderModel;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import com.BESourceryAdmissionTool.user.security.JwtAuthFilter;
 import com.BESourceryAdmissionTool.user.security.JwtMaker;
@@ -44,11 +45,11 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class).anonymous()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/categories").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/tasks").permitAll()
-                .antMatchers(HttpMethod.GET, "/tasks/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers( "/categories").permitAll()
+                .antMatchers( "/users/login").permitAll()
+                .antMatchers( "/tasks").permitAll()
+                .antMatchers("/tasks/**").permitAll()
+                .anyRequest().permitAll();
 
 
         return http.build();

@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.user.services;
 
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
@@ -20,7 +21,7 @@ public class UserService {
     public void storeJWt(String email, String token) throws Exception {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {
-            throw new Exception();
+            throw new UnauthorizedExeption("user is not existing");
         }
         User user = userOptional.get();
         user.setToken(token);
@@ -30,7 +31,7 @@ public class UserService {
 
     public void deleteToken(User user) {
         if (user == null || user.getToken() == null) {
-            throw new RuntimeException("User not found");
+            throw new UnauthorizedExeption("You are not logged in");
         }
         user.setToken(null);
         userRepository.save(user);
