@@ -23,7 +23,7 @@ public class TaskMapper {
                 task.getDescription(),
                 task.getSummary(),
                 task.getCreationDate(),
-                task.getScore(),
+                task.getVotes().size(),
                 task.getAuthor().getName(),
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName())
         );
@@ -36,7 +36,6 @@ public class TaskMapper {
                 .description(taskRequest.getDescription())
                 .summary(taskRequest.getSummary())
                 .creationDate(new Date())
-                .score(0)
                 .category(category)
                 .author(author)
                 .answers(null)
@@ -50,7 +49,7 @@ public class TaskMapper {
                 task.getDescription(),
                 task.getSummary(),
                 task.getCreationDate(),
-                task.getScore(),
+                task.getVotes().size(),
                 new UserDto(task.getAuthor().getId(), task.getAuthor().getName()),
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName()),
                 task.getAnswers()

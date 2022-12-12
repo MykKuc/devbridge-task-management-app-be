@@ -1,6 +1,8 @@
 package com.BESourceryAdmissionTool.user.model;
 
+import com.BESourceryAdmissionTool.task_vote.model.Task_Vote;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user", schema =  "public")
@@ -26,7 +30,9 @@ public class User implements UserDetails {
     private String password;
     private String token;
 
-
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Task_Vote> votes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
