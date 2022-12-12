@@ -31,7 +31,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: token
-                  type: varchar(200)
+                  type: varchar(300)
                   constraints:
                     nullable: true
         - createTable:
@@ -153,13 +153,103 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: 'petras'
+                  value: 'Titas'
               - column:
                   name: email
-                  value: 'petras@gmail.com'
+                  value: 'titas.drag@gmail.com'
               - column:
                   name: password
-                  value: '$2a$12$G6L1IcLdhSix3KcKMJPdve2N/rQ8XMAUH9yGZYlsII/cJya6cSzv6'
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Haroldas'
+              - column:
+                  name: email
+                  value: 'bartuseviciusharoldas@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Marius'
+              - column:
+                  name: email
+                  value: 'marius.davidavicius@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Tomas'
+              - column:
+                  name: email
+                  value: 'tomas.matijoska@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Martynas'
+              - column:
+                  name: email
+                  value: 'martynas.gudziunas@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Mykolas'
+              - column:
+                  name: email
+                  value: 'mykolas.kucinskas2@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Karolina'
+              - column:
+                  name: email
+                  value: 'karolina.ramaskaite@devbridge.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
               - column:
                   name: token
                   value: null
