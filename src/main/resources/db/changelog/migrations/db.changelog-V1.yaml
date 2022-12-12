@@ -19,6 +19,21 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: email
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(70)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(300)
+                  constraints:
+                    nullable: true
         - createTable:
             tableName: category
             columns:
@@ -138,7 +153,106 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: 'petras'
+                  value: 'Titas'
+              - column:
+                  name: email
+                  value: 'titas.drag@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Haroldas'
+              - column:
+                  name: email
+                  value: 'bartuseviciusharoldas@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Marius'
+              - column:
+                  name: email
+                  value: 'marius.davidavicius@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Tomas'
+              - column:
+                  name: email
+                  value: 'tomas.matijoska@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Martynas'
+              - column:
+                  name: email
+                  value: 'martynas.gudziunas@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Mykolas'
+              - column:
+                  name: email
+                  value: 'mykolas.kucinskas2@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'Karolina'
+              - column:
+                  name: email
+                  value: 'karolina.ramaskaite@devbridge.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
         - insert:
             tableName: category
             columns:
