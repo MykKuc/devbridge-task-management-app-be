@@ -39,6 +39,11 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    @GetMapping("me")
+    public Optional<User> getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String currentJwtToken){
+        return userService.getCurrentUserByJwtToken(currentJwtToken);
+    }
+
     @PostMapping("login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody LoginRequest loginRequest) throws Exception {
 
