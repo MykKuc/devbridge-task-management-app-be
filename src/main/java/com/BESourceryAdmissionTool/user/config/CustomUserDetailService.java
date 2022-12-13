@@ -12,16 +12,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
-@Autowired
+
+    @Autowired
     public CustomUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-User user= userRepository.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("this email is not registered"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("this email is not registered"));
 
-        return  new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),  user.getAuthorities()) {
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getAuthorities()) {
         };
     }
 }

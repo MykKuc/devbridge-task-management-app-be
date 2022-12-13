@@ -1,5 +1,8 @@
 package com.BESourceryAdmissionTool.user.model;
 
+import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Table(name = "user", schema =  "public")
@@ -24,7 +28,7 @@ import java.util.HashSet;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
@@ -42,11 +46,14 @@ public class User implements UserDetails {
     @NotBlank
     @Pattern(regexp = "^(?=.*[0-9]).{6,}")
     @Length(min = 1,max = 70,message = "Incorrect Length of a name")
+    @JsonIgnore
     private String password;
 
     private String token;
 
-
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<TaskVote> votes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
