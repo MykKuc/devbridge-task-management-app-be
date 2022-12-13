@@ -32,6 +32,5 @@ public class UserRequest {
     @NotBlank
     @Pattern(regexp = "^(?=.*[0-9]).{6,}")
     @Length(min = 1, max = 70, message = "Incorrect Length of a password.")
-    @JsonIgnore
     private String password;
 }
