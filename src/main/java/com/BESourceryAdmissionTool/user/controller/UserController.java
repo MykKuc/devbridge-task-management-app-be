@@ -16,8 +16,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -60,7 +65,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(code=HttpStatus.CREATED, reason = "created")
-    public void addUser(@RequestBody UserRequest userRequest){
+    public void addUser(@Valid @RequestBody UserRequest userRequest){
         userService.createUser(userRequest);
     }
 
@@ -70,6 +75,18 @@ public class UserController {
                                                @AuthenticationPrincipal User user) throws Exception {
         userService.deleteToken(user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 
 }
