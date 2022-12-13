@@ -26,4 +26,10 @@ public class TaskVoteController {
     public void addVote(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @PathVariable("taskId") Long taskId) {
         taskVoteService.addVote(authentication, taskId);
     }
+
+    @DeleteMapping("{taskId}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT, reason = "Deleted")
+    public void deleteVote(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @PathVariable("taskId") Long taskId) {
+        taskVoteService.deleteVote(authentication, taskId);
+    }
 }

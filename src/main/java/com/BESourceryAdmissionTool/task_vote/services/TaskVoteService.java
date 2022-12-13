@@ -4,6 +4,7 @@ import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistExcepti
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
+import com.BESourceryAdmissionTool.task_vote.exceptions.TaskVoteNotFoundException;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVoteKey;
 import com.BESourceryAdmissionTool.task_vote.repositories.TaskVoteRepository;
@@ -47,5 +48,27 @@ public class TaskVoteService {
         TaskVote taskVote = new TaskVote(taskVoteKey, task, user);
 
         taskVoteRepository.save(taskVote);
+    }
+
+    public void deleteVote (String token, Long taskId) {
+        Optional<User> optionalUser = userRepository.findByToken(token);
+        if (optionalUser.isEmpty()) {
+            throw new UnauthorizedExeption("User must be logged in to vote");
+        }
+        User user = optionalUser.get();
+
+        Optional<Task> optionalTask = taskRepository.findTaskById(taskId);
+        if (optionalTask.isEmpty()) {
+            throw new TaskNotFoundException("Task with the following id is not found: " + taskId);
+        }
+        Task task = optionalTask.get();
+
+        Optional<TaskVote> optionalTaskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
+        if (optionalTaskVote.isEmpty()) {
+            throw new TaskVoteNotFoundException("Must vote before removing vote");
+        }
+        TaskVote taskVote = optionalTaskVote.get();
+
+        taskVoteRepository.delete(taskVote);
     }
 }
