@@ -1,11 +1,15 @@
 package com.BESourceryAdmissionTool.category.services;
 
+import com.BESourceryAdmissionTool.category.dto.CategoryDto;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
-import com.BESourceryAdmissionTool.category.dto.CategoryDto;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
+import com.BESourceryAdmissionTool.category.services.mapper.CategoryMapper;
+import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
+import com.BESourceryAdmissionTool.user.model.User;
+import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,22 +17,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final CategoryMapper categoryMapper;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     public List<CategoryOption> getCategoriesOptions() {
         return categoryRepository.findAllOptions();
     }
-    public CategoryDto  getAllCategories() {
-        return new CategoryDto(categoryRepository.findAll());
+
+    public List<CategoryDto> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(categoryMapper::categoryMap)
+                .collect(Collectors.toList());
     }
 
     public void updateCategoryService(long id, CategoryRequest categoryRequest) {
@@ -41,16 +54,22 @@ public class CategoryService {
         category.setDescription(categoryRequest.getDescription());
         categoryRepository.save(category);
     }
-    @Transactional
-    public void createCategoryService(CategoryRequest categoryRequest){
-        long authorId = 1; // TODO: should be taken from currently logged in user's id when authentication is created
-        Date currentDate=new Date();
 
+    @Transactional
+    public void createCategoryService(CategoryRequest categoryRequest) {
+        long authorId = 1; // TODO: should be taken from currently logged in user's id when authentication is created
+        Date currentDate = new Date();
+
+        Optional<User> userOptional = userRepository.findById(authorId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(authorId);
+        }
+        User author = userOptional.get();
 
         Category category = Category.builder()
                 .name(categoryRequest.getName())
                 .description(categoryRequest.getDescription())
-                .authorId(authorId)
+                .author(author)
                 .creationDate(currentDate)
                 .build();
 
