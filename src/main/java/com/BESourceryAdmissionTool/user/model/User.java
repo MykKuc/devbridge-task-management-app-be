@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Entity
-@Table(name = "user", schema =  "public")
+@Table(name = "user", schema = "public")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,19 +33,19 @@ public class User implements UserDetails {
 
     @NotNull
     @NotBlank
-    @Length(min = 1,max = 50,message = "Incorrect Length of a name")
+    @Length(min = 1, max = 50, message = "Incorrect Length of a name")
     private String name;
 
     @NotNull
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$")
-    @Length(min = 1,max = 50,message = "Incorrect Length of a name")
+    @Length(min = 1, max = 50, message = "Incorrect Length of an email.")
     private String email;
 
     @NotNull
     @NotBlank
     @Pattern(regexp = "^(?=.*[0-9]).{6,}")
-    @Length(min = 1,max = 70,message = "Incorrect Length of a name")
+    @Length(min = 1, max = 70, message = "Incorrect Length of a password.")
     @JsonIgnore
     private String password;
 
