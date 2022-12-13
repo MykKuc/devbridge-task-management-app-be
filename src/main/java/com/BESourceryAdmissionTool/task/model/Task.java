@@ -2,7 +2,7 @@ package com.BESourceryAdmissionTool.task.model;
 
 import com.BESourceryAdmissionTool.answer.model.Answer;
 import com.BESourceryAdmissionTool.category.model.Category;
-import com.BESourceryAdmissionTool.task_vote.model.Task_Vote;
+import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "task")
@@ -32,7 +31,7 @@ public class Task {
 
     @OneToMany(mappedBy = "task")
     @JsonManagedReference
-    private List<Task_Vote> votes;
+    private List<TaskVote> votes;
 
     @ManyToOne
     private Category category;

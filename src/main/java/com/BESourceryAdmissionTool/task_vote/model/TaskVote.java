@@ -1,28 +1,36 @@
 package com.BESourceryAdmissionTool.task_vote.model;
 
+
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
 
+@Entity
 @Table(name = "task_votes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
-public class Task_VoteKey implements Serializable {
+public class TaskVote {
 
-    @Column(name = "user_id")
-    private Long userId;
+    @EmbeddedId
+    TaskVoteKey id;
 
-    @Column(name = "task_id")
-    private Long taskId;
-    
+    @JsonBackReference
+    @ManyToOne
+    @MapsId("taskId")
+    @JoinColumn(name = "task_id")
+    Task task;
+
+    @JsonBackReference
+    @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    User user;
+
+
 }
