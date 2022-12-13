@@ -1,7 +1,9 @@
 package com.BESourceryAdmissionTool.category.services;
 
 import com.BESourceryAdmissionTool.category.dto.CategoryDto;
+import com.BESourceryAdmissionTool.category.dto.CategoryEditDto;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
+import com.BESourceryAdmissionTool.category.exceptions.CategoryNotFoundException;
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
@@ -35,6 +37,15 @@ public class CategoryService {
 
     public List<CategoryOption> getCategoriesOptions() {
         return categoryRepository.findAllOptions();
+    }
+
+    public CategoryEditDto getCategory(long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        if (categoryOptional.isEmpty()) {
+            throw new CategoryNotFoundException(id);
+        }
+        Category category = categoryOptional.get();
+        return categoryMapper.categoryEditMap(category);
     }
 
     public List<CategoryDto> getAllCategories() {

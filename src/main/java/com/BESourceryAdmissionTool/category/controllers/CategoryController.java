@@ -1,6 +1,7 @@
 package com.BESourceryAdmissionTool.category.controllers;
 
 import com.BESourceryAdmissionTool.category.dto.CategoryDto;
+import com.BESourceryAdmissionTool.category.dto.CategoryEditDto;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.services.CategoryService;
@@ -24,6 +25,11 @@ public class CategoryController {
     @GetMapping("/options")
     public List<CategoryOption> GetCategoriesOptions() {
         return categoryService.getCategoriesOptions();
+    }
+
+    @GetMapping("{id}")
+    public CategoryEditDto getCategory(@PathVariable("id") long id){
+        return categoryService.getCategory(id);
     }
 
     @GetMapping
