@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,7 @@ public class CategoryController {
 
     @PutMapping("{id}")
     @ResponseStatus(code = HttpStatus.OK, reason = "OK")
-    public void updateCategory(@PathVariable("id") long id, @RequestBody CategoryRequest categoryRequest) {
+    public void updateCategory(@PathVariable("id") long id, @Valid @RequestBody CategoryRequest categoryRequest) {
         categoryService.updateCategoryService(id, categoryRequest);
     }
 
