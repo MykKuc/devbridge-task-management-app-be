@@ -7,6 +7,7 @@ import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
+import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,8 @@ public class TaskMapper {
                 task.getCreationDate(),
                 task.getVotes().size(),
                 task.getAuthor().getName(),
-                new CategoryDto(task.getCategory().getId(), task.getCategory().getName())
+                new CategoryDto(task.getCategory().getId(), task.getCategory().getName()),
+                false
         );
     }
 
@@ -50,7 +52,8 @@ public class TaskMapper {
                 task.getVotes().size(),
                 new UserDto(task.getAuthor().getId(), task.getAuthor().getName()),
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName()),
-                task.getAnswers()
+                task.getAnswers(),
+                false
         );
     }
 

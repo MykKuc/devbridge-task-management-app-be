@@ -6,6 +6,7 @@ import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,13 +30,13 @@ public class TaskController {
     }
 
     @GetMapping("{id}")
-    public Optional<FullTaskDto> getTaskData(@PathVariable("id") Long id) {
-        return taskService.getTaskData(id);
+    public Optional<FullTaskDto> getTaskData(@PathVariable("id") Long id, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication) {
+        return taskService.getTaskData(id, authentication);
     }
 
     @GetMapping
-    public List<TaskDto> getAllTasks() {
-        return taskService.getAllTasks();
+    public List<TaskDto> getAllTasks(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication) {
+        return taskService.getAllTasks(authentication);
     }
 
     @PostMapping
