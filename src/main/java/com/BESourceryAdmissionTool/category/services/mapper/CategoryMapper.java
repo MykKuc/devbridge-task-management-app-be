@@ -19,7 +19,6 @@ public class CategoryMapper {
 
     public CategoryEditDto categoryEditMap(Category category) {
         return new CategoryEditDto(
-                category.getId(),
                 category.getName(),
                 category.getDescription()
         );
