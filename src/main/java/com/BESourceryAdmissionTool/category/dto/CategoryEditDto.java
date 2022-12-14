@@ -3,14 +3,9 @@ package com.BESourceryAdmissionTool.category.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
-public class CategoryDto {
-    private long id;
+public class CategoryEditDto {
     private String name;
     private String description;
-    private Date creationDate;
-    private String author;
 }

@@ -24,6 +24,7 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: password
                   type: varchar(70)
@@ -49,6 +50,7 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: description
                   type: varchar(200)
