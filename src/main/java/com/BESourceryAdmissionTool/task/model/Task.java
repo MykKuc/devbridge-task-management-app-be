@@ -2,6 +2,7 @@ package com.BESourceryAdmissionTool.task.model;
 
 import com.BESourceryAdmissionTool.answer.model.Answer;
 import com.BESourceryAdmissionTool.category.model.Category;
+import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,10 @@ public class Task {
     private String description;
     private String summary;
     private Date creationDate;
-    private int score;
+
+    @OneToMany(mappedBy = "task")
+    @JsonManagedReference
+    private List<TaskVote> votes;
 
     @ManyToOne
     private Category category;

@@ -3,6 +3,8 @@ package com.BESourceryAdmissionTool.user.controller;
 import com.BESourceryAdmissionTool.user.dto.AuthResponse;
 import com.BESourceryAdmissionTool.user.request.LoginRequest;
 import com.BESourceryAdmissionTool.user.model.User;
+import com.BESourceryAdmissionTool.user.repositories.UserRepository;
+import com.BESourceryAdmissionTool.user.request.UserRequest;
 import com.BESourceryAdmissionTool.user.security.JwtMaker;
 import com.BESourceryAdmissionTool.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -60,10 +67,19 @@ public class UserController {
 
     }
 
+
+    @PostMapping
+    @ResponseStatus(code=HttpStatus.CREATED, reason = "created")
+    public void addUser(@Valid @RequestBody UserRequest userRequest){
+        userService.createUser(userRequest);
+    }
+
+
     @PutMapping("logout")
     public ResponseEntity<String > deleteToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
                                                @AuthenticationPrincipal User user) throws Exception {
         userService.deleteToken(user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

@@ -1,10 +1,12 @@
 package com.BESourceryAdmissionTool.user.services;
 
 import com.BESourceryAdmissionTool.task.exceptions.UserNotLoggedInException;
+import com.BESourceryAdmissionTool.user.exceptions.UserAlreadyExistsException;
 import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
+import com.BESourceryAdmissionTool.user.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
 
     @Autowired
@@ -49,15 +52,33 @@ public class UserService {
 
     public Optional<User> getCurrentUserByJwtToken(String currentJwtToken) {
 
-        if(currentJwtToken == null){
+        if (currentJwtToken == null) {
             throw new UserNotLoggedInException("JWT token not provided");
         }
 
         Optional<User> currentUser = userRepository.findByToken(currentJwtToken);
-        if(currentUser.isEmpty()){
+        if (currentUser.isEmpty()) {
             throw new UserNotLoggedInException("No User is currently logged in.");
         }
 
         return currentUser;
+    }
+
+    public void createUser(UserRequest userRequest) {
+
+        Optional<User> sameUser = userRepository.findByEmail(userRequest.getEmail());
+        if(sameUser.isPresent()){
+            throw new UserAlreadyExistsException(userRequest.getEmail());
+        }
+
+        User user = User.builder()
+                .name(userRequest.getName())
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
+                .build();
+
+
+        userRepository.save(user);
+
     }
 }

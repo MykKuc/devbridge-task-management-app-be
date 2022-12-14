@@ -2,6 +2,7 @@ package com.BESourceryAdmissionTool.task.controllers;
 
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
+import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
 import com.BESourceryAdmissionTool.user.model.User;
@@ -47,19 +48,14 @@ public class TaskController {
         taskService.createTask(taskRequest);
     }
 
+    @PutMapping(path ="{id}")
+    public void updateTask(@PathVariable("id") long id, @RequestBody UpdateTaskRequest request){
+        taskService.updateTask(id, request);
+    }
+
     @DeleteMapping("{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT, reason = "Deleted")
     public void deleteTask(@PathVariable("id") Long id) { taskService.deleteTask(id);}
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
+
 }
