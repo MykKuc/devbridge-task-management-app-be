@@ -37,9 +37,10 @@ public class UserService {
         userRepository.save(user);
     }
     public void checkUser(User user, String token){
-        if (user==null|| user.getToken() == null){
-            throw new UnauthorizedExeption("user dont exist");
-        }else if (token.equals(user.getToken())){
+        if (user == null ) {
+            throw new UnauthorizedExeption("User is null");
+        }
+        else if (!token.equals("Bearer "+user.getToken())){
             throw new UnauthorizedExeption("Wrong user");
         }
     }

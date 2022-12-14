@@ -38,7 +38,7 @@ public class JwtMaker {
             Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
-            throw new UnauthorizedExeption("User does not exist");
+            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
         }
     }
 }

@@ -41,7 +41,9 @@ public class CategoryController {
 
     @PutMapping("{id}")
     @ResponseStatus(code = HttpStatus.OK, reason = "OK")
-    public void updateCategory(@PathVariable("id") long id, @RequestBody CategoryRequest categoryRequest) {
+    public void updateCategory(@PathVariable("id") long id, @RequestBody CategoryRequest categoryRequest, @RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                               @AuthenticationPrincipal User user) throws UnauthorizedExeption {
+        userService.checkUser(user,authentication);
         categoryService.updateCategoryService(id, categoryRequest);
     }
 

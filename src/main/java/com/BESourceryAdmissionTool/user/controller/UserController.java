@@ -37,9 +37,7 @@ public class UserController {
 
 
     @GetMapping("{id}")
-    public Optional<User> getUser(@PathVariable("id") Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
-                                  @AuthenticationPrincipal User user) throws UnauthorizedExeption {
-        userService.checkUser(user,authentication);
+    public Optional<User> getUser(@PathVariable("id") Long id){
         return userService.getUser(id);
     }
 
