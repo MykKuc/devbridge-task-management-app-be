@@ -2,6 +2,7 @@ package com.BESourceryAdmissionTool.category.services;
 
 import com.BESourceryAdmissionTool.category.dto.CategoryDto;
 import com.BESourceryAdmissionTool.category.dto.CategoryEditDto;
+import com.BESourceryAdmissionTool.category.exceptions.CategoryAlreadyExistsException;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryNotFoundException;
 import com.BESourceryAdmissionTool.category.model.Category;
@@ -60,7 +61,17 @@ public class CategoryService {
         if (categoryOption.isEmpty()) {
             throw new CategoryIdNotExistException(id);
         }
+
         Category category = categoryOption.get();
+        Optional<Category> sameName = categoryRepository.findCategoryByName(categoryRequest.getName());
+        if (sameName.isPresent()) {
+            Category sameNameCategory = sameName.get();
+
+            if (sameNameCategory.getId() != category.getId()) {
+                throw new CategoryAlreadyExistsException(categoryRequest.getName());
+            }
+        }
+
         category.setName(categoryRequest.getName());
         category.setDescription(categoryRequest.getDescription());
         categoryRepository.save(category);
@@ -68,6 +79,11 @@ public class CategoryService {
 
     @Transactional
     public void createCategoryService(CategoryRequest categoryRequest) {
+        Optional<Category> sameName = categoryRepository.findCategoryByName(categoryRequest.getName());
+        if (sameName.isPresent()) {
+            throw new CategoryAlreadyExistsException(categoryRequest.getName());
+        }
+
         long authorId = 1; // TODO: should be taken from currently logged in user's id when authentication is created
         Date currentDate = new Date();
 

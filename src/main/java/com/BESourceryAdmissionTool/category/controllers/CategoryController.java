@@ -47,7 +47,7 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(code=HttpStatus.CREATED, reason = "CREATED")
-    public void createCategory(@RequestBody CategoryRequest categoryRequest){
+    public void createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
         categoryService.createCategoryService(categoryRequest);
     }
 }
