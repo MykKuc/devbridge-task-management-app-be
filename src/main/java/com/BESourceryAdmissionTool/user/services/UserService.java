@@ -1,9 +1,11 @@
 package com.BESourceryAdmissionTool.user.services;
 
+import com.BESourceryAdmissionTool.user.exceptions.UserAlreadyExistsException;
 import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
+import com.BESourceryAdmissionTool.user.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
 
     @Autowired
@@ -43,5 +46,23 @@ public class UserService {
             throw new UserNotFoundException(id);
         }
         return user;
+    }
+
+    public void createUser(UserRequest userRequest) {
+
+        Optional<User> sameUser = userRepository.findByEmail(userRequest.getEmail());
+        if(sameUser.isPresent()){
+            throw new UserAlreadyExistsException(userRequest.getEmail());
+        }
+
+        User user = User.builder()
+                .name(userRequest.getName())
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
+                .build();
+
+
+        userRepository.save(user);
+
     }
 }
