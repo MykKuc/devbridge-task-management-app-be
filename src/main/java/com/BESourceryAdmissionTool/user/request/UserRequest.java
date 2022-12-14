@@ -30,7 +30,7 @@ public class UserRequest {
 
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^(?=.*[0-9]).{6,}")
+    @Pattern(regexp = "^(?=.*[0-9]).{6,}", message = "Password must be at least 6 characters and have 1 number.")
     @Length(min = 1, max = 70, message = "Incorrect Length of a password.")
     private String password;
 }
