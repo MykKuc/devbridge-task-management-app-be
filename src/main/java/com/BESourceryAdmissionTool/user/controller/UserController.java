@@ -1,6 +1,7 @@
 package com.BESourceryAdmissionTool.user.controller;
 
 import com.BESourceryAdmissionTool.user.dto.AuthResponse;
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.request.LoginRequest;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.security.JwtMaker;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +37,9 @@ public class UserController {
 
 
     @GetMapping("{id}")
-    public Optional<User> getUser(@PathVariable("id") Long id) {
+    public Optional<User> getUser(@PathVariable("id") Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                                  @AuthenticationPrincipal User user) throws UnauthorizedExeption {
+        userService.checkUser(user,authentication);
         return userService.getUser(id);
     }
 
@@ -57,7 +61,7 @@ public class UserController {
 
     @PutMapping("logout")
     public ResponseEntity<String > deleteToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
-                                               @AuthenticationPrincipal User user) throws Exception {
+                                               @AuthenticationPrincipal User user) throws UnauthorizedExeption {
         userService.deleteToken(user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

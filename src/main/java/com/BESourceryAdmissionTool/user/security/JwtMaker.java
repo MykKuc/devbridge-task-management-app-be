@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.user.security;
 
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,7 +38,7 @@ public class JwtMaker {
             Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+            throw new UnauthorizedExeption("User does not exist");
         }
     }
 }
