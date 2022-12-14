@@ -47,8 +47,9 @@ public class UserController {
     }
 
     @GetMapping("me")
-    public Optional<User> getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String currentJwtToken){
-        return userService.getCurrentUserByJwtToken(currentJwtToken);
+    public Optional<User> getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String currentJwtToken,
+                                         @AuthenticationPrincipal User user){
+        return userService.getCurrentUserByJwtToken(currentJwtToken, user);
     }
 
     @PostMapping("login")

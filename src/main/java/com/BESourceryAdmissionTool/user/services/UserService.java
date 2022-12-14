@@ -50,7 +50,7 @@ public class UserService {
         return user;
     }
 
-    public Optional<User> getCurrentUserByJwtToken(String currentJwtToken) {
+    public Optional<User> getCurrentUserByJwtToken(String currentJwtToken, User user) {
 
         if (currentJwtToken == null) {
             throw new UserNotLoggedInException("JWT token not provided");
@@ -58,7 +58,7 @@ public class UserService {
 
         Optional<User> currentUser = userRepository.findByToken(currentJwtToken);
         if (currentUser.isEmpty()) {
-            throw new UserNotLoggedInException("No User is currently logged in.");
+            throw new UserNotLoggedInException("No User with such token or user is not logged in.");
         }
 
         return currentUser;
