@@ -4,6 +4,7 @@ import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistExcepti
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
+import com.BESourceryAdmissionTool.task_vote.exceptions.TaskVoteFoundException;
 import com.BESourceryAdmissionTool.task_vote.exceptions.TaskVoteNotFoundException;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVoteKey;
@@ -42,6 +43,11 @@ public class TaskVoteService {
             throw new TaskNotFoundException("Task with the following id is not found: " + taskId);
         }
         Task task = optionalTask.get();
+
+        Optional<TaskVote> optionalTaskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
+        if (optionalTaskVote.isPresent()) {
+            throw new TaskVoteFoundException("User already voted for this task");
+        }
 
         TaskVoteKey taskVoteKey = new TaskVoteKey(user.getId(), task.getId());
 
