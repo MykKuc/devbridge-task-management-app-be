@@ -19,4 +19,5 @@ public class FullTaskDto {
     private UserDto user;
     private CategoryDto category;
     private List<Answer> answers;
+    private boolean voted;
 }

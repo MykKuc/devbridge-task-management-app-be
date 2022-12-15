@@ -1,5 +1,6 @@
 package com.BESourceryAdmissionTool.category.model;
 
+import com.BESourceryAdmissionTool.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,6 @@ public class Category {
     private String name;
     private String description;
     private Date creationDate;
-    private Long authorId;
+    @ManyToOne
+    private User author;
 }
