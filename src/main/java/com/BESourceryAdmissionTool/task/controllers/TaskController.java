@@ -9,6 +9,9 @@ import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,15 +49,17 @@ public class TaskController {
         taskService.createTask(taskRequest);
     }
 
-    @PutMapping(path = "{id}")
-    public void updateTask(@PathVariable("id") long id, @RequestBody UpdateTaskRequest request) {
-        taskService.updateTask(id, request);
+    @PutMapping(path ="{id}")
+    public void updateTask(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @AuthenticationPrincipal User user,
+                            @PathVariable("id") long id, @RequestBody UpdateTaskRequest request){
+        taskService.updateTask(id, request, user);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT, reason = "Deleted")
-    public void deleteTask(@PathVariable("id") Long id) {
-        taskService.deleteTask(id);
+    public void deleteTask(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @AuthenticationPrincipal User user,
+                            @PathVariable("id") Long id) {
+        taskService.deleteTask(id,user);
     }
 
 

@@ -5,6 +5,7 @@ import com.BESourceryAdmissionTool.category.dto.CategoryEditDto;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryAlreadyExistsException;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryNotFoundException;
+import com.BESourceryAdmissionTool.category.exceptions.CurrentUserIdNotEqualAuthorIdException;
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
@@ -14,6 +15,8 @@ import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final CategoryMapper categoryMapper;
+
 
     @Autowired
     public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository, CategoryMapper categoryMapper) {
@@ -56,10 +60,17 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public void updateCategoryService(long id, CategoryRequest categoryRequest) {
+    public void updateCategoryService(long id, CategoryRequest categoryRequest, User user) {
         Optional<Category> categoryOption = categoryRepository.findById(id);
         if (categoryOption.isEmpty()) {
             throw new CategoryIdNotExistException(id);
+        }
+
+        long currentUserId = user.getId();
+        long authorOfCategoryId = categoryOption.get().getAuthor().getId();
+
+        if(currentUserId != authorOfCategoryId){
+            throw new CurrentUserIdNotEqualAuthorIdException("Current user " + user.getName() + " is not the author. " + categoryOption.get().getAuthor().getName() + " is the author.");
         }
 
         Category category = categoryOption.get();

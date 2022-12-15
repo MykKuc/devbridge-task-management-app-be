@@ -11,18 +11,20 @@ import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
 import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNameAlreadyExistsException;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
+import com.BESourceryAdmissionTool.task.exceptions.UserNotEqualTaskAuthorException;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.task_vote.repositories.TaskVoteRepository;
-import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,11 +77,18 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteTask(long id) {
+    public void deleteTask(long id,User user) {
         Optional<Task> task = taskRepository.findTaskById(id);
         if (task.isEmpty()) {
             throw new TaskNotFoundException("Task not found");
         }
+
+        long currentUserId = user.getId();
+        long taskAuthorId = task.get().getAuthor().getId();
+        if(currentUserId != taskAuthorId ){
+            throw new UserNotEqualTaskAuthorException("Can not delete task. You are not the author of the task.");
+        }
+
         answerRepository.deleteAnswersByTask(task.get());
         taskRepository.deleteById(id);
     }
@@ -113,10 +122,16 @@ public class TaskService {
         addAnswersForTask(taskRequest.getAnswers(), savedTask);
     }
 
-    public void updateTask(long id, UpdateTaskRequest request) {
+    public void updateTask(long id, UpdateTaskRequest request, User user) {
         Optional<Task> primaryTask = taskRepository.findTaskById(id);
         if (primaryTask.isEmpty()) {
             throw new TaskNotFoundException("Task was not found");
+        }
+
+        long currentUserId = user.getId();
+        long taskAuthorId = primaryTask.get().getAuthor().getId();
+        if( currentUserId != taskAuthorId ){
+            throw new UserNotEqualTaskAuthorException("Can not update the task. You are not the author of the task.");
         }
 
         Task task = primaryTask.get();
