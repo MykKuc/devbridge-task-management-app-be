@@ -127,6 +127,20 @@ public class TaskService {
             throw new TaskNotFoundException("Task was not found");
         }
 
+        //Gets current user name (email) and the email of the task author.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalEmail = authentication.getName();
+        String taskAuthorEmail = primaryTask.get().getAuthor().getEmail();
+
+        // Checks if user is logged in and if task author is the same as logged in user.
+        if(currentPrincipalEmail == null){
+            throw new UserNotLoggedInException("No User is logged in at the moment.");
+        }
+
+        if(!currentPrincipalEmail.equals(taskAuthorEmail) ){
+            throw new UserNotEqualTaskAuthorException("Can not update the task. You are not the author of the task.");
+        }
+
         Task task = primaryTask.get();
 
         answerRepository.deleteAnswersByTask(task);

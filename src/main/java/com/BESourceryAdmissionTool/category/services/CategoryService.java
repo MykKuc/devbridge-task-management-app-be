@@ -77,12 +77,6 @@ public class CategoryService {
 
         long idOfCurrentUser = currentUser.get().getId();
 
-        long categoryAuthorId = categoryOption.get().getAuthorId();
-
-        if(idOfCurrentUser != categoryAuthorId){
-            throw new CurrentUserIdNotEqualAuthorIdException("Modification of category not allowed. You are not the author.");
-        }
-
         Category category = categoryOption.get();
         Optional<Category> sameName = categoryRepository.findCategoryByName(categoryRequest.getName());
         if (sameName.isPresent()) {
