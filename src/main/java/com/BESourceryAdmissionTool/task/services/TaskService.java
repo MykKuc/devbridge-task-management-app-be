@@ -15,6 +15,9 @@ import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
+import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
+import com.BESourceryAdmissionTool.task_vote.repositories.TaskVoteRepository;
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
@@ -33,30 +36,34 @@ public class TaskService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
+    private final TaskVoteRepository taskVoteRepository;
     private final TaskMapper taskMapper;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, CategoryRepository categoryRepository, UserRepository userRepository, AnswerRepository answerRepository, TaskMapper taskMapper) {
+    public TaskService(TaskRepository taskRepository, TaskVoteRepository taskVoteRepository, CategoryRepository categoryRepository, UserRepository userRepository, AnswerRepository answerRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.answerRepository = answerRepository;
+        this.taskVoteRepository = taskVoteRepository;
         this.taskMapper = taskMapper;
     }
 
-    public Optional<FullTaskDto> getTaskData(long id) {
+    public Optional<FullTaskDto> getTaskData(long id, User user) {
         Optional<Task> task = taskRepository.findTaskById(id);
         if (task.isEmpty()) {
             throw new TaskNotFoundException("Task not found");
         }
-        return task.map(taskMapper::fullTaskMap);
+
+        return task.map(tsk -> taskMapper.fullTaskMap(tsk, checkVote(user, tsk)));
     }
 
-    public List<TaskDto> getAllTasks() {
+    public List<TaskDto> getAllTasks(User user) {
         List<Task> tasks = taskRepository.findAll();
-        return tasks.stream()
-                .map(taskMapper::taskMap)
+        List<TaskDto> list = tasks.stream()
+                .map(task -> taskMapper.taskMap(task, checkVote(user, task)))
                 .collect(Collectors.toList());
+        return list;
     }
 
     public void deleteTask(long id) {
@@ -70,7 +77,7 @@ public class TaskService {
 
     public void createTask(TaskRequest taskRequest) {
         Optional<Task> sameTitle = taskRepository.findTaskByTitle(taskRequest.getTitle());
-        if (sameTitle.isPresent()){
+        if (sameTitle.isPresent()) {
             throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
         }
 
@@ -88,19 +95,18 @@ public class TaskService {
 
         Task task = taskMapper.taskMap(taskRequest, category, author);
         Task savedTask;
-        try{
+        try {
             savedTask = taskRepository.save(task);
-        }
-        catch (DataIntegrityViolationException ex){
+        } catch (DataIntegrityViolationException ex) {
             throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
         }
 
         addAnswersForTask(taskRequest.getAnswers(), savedTask);
     }
 
-    public void updateTask(long id, UpdateTaskRequest request){
+    public void updateTask(long id, UpdateTaskRequest request) {
         Optional<Task> primaryTask = taskRepository.findTaskById(id);
-        if(primaryTask.isEmpty()){
+        if (primaryTask.isEmpty()) {
             throw new TaskNotFoundException("Task was not found");
         }
 
@@ -129,5 +135,16 @@ public class TaskService {
                 .map(tr -> taskMapper.answerMap(tr.getText(), tr.isCorrect(), savedTask))
                 .collect(Collectors.toList());
         answerRepository.saveAll(answers);
+    }
+
+    private boolean checkVote(User user, Task task) {
+        if (user != null && user.getToken() != null)
+        {
+            Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
+            if (taskVote.isPresent()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

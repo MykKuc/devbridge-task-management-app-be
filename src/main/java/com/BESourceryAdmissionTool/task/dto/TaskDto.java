@@ -16,4 +16,5 @@ public class TaskDto {
     private int score;
     private String author;
     private CategoryDto category;
+    private boolean voted;
 }
