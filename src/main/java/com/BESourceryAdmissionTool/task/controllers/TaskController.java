@@ -37,7 +37,7 @@ public class TaskController {
                                      @RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
                                      @AuthenticationPrincipal User user) {
 
-        return taskService.getAllTasks(user, authentication, onlyMine);
+        return taskService.getAllTasks(user, onlyMine);
     }
 
     @PostMapping

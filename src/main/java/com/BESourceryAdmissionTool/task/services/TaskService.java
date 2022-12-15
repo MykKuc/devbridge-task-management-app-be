@@ -53,29 +53,20 @@ public class TaskService {
         return task.map(taskMapper::fullTaskMap);
     }
 
-    public List<TaskDto> getAllTasks(User user, String token, boolean onlyMine) {
+    public List<TaskDto> getAllTasks(User user, boolean onlyMine) {
         List<Task> tasks;
-        User userChecked = getUser(user, token);
-        if (userChecked == null && onlyMine) {
+        if (user == null && onlyMine) {
             throw new UnauthorizedExeption("User not authorized");
         }
 
-        if(userChecked == null || !onlyMine){
+        if (user != null && onlyMine) {
+            tasks = taskRepository.findTasksByAuthorId(user.getId());
+        } else {
             tasks = taskRepository.findAll();
-        }
-        else{
-            tasks = taskRepository.findTasksByAuthorId(userChecked.getId());
         }
         return tasks.stream()
                 .map(taskMapper::taskMap)
                 .collect(Collectors.toList());
-    }
-
-    public User getUser(User user, String token){
-        if(user != null && (user.getToken() == null || !("Bearer " + user.getToken()).equals(token))){
-            return null;
-        }
-        return user;
     }
 
     public void deleteTask(long id) {
@@ -89,7 +80,7 @@ public class TaskService {
 
     public void createTask(TaskRequest taskRequest) {
         Optional<Task> sameTitle = taskRepository.findTaskByTitle(taskRequest.getTitle());
-        if (sameTitle.isPresent()){
+        if (sameTitle.isPresent()) {
             throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
         }
 
@@ -107,19 +98,18 @@ public class TaskService {
 
         Task task = taskMapper.taskMap(taskRequest, category, author);
         Task savedTask;
-        try{
+        try {
             savedTask = taskRepository.save(task);
-        }
-        catch (DataIntegrityViolationException ex){
+        } catch (DataIntegrityViolationException ex) {
             throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
         }
 
         addAnswersForTask(taskRequest.getAnswers(), savedTask);
     }
 
-    public void updateTask(long id, UpdateTaskRequest request){
+    public void updateTask(long id, UpdateTaskRequest request) {
         Optional<Task> primaryTask = taskRepository.findTaskById(id);
-        if(primaryTask.isEmpty()){
+        if (primaryTask.isEmpty()) {
             throw new TaskNotFoundException("Task was not found");
         }
 
