@@ -4,22 +4,16 @@ import com.BESourceryAdmissionTool.category.dto.CategoryDto;
 import com.BESourceryAdmissionTool.category.dto.CategoryEditDto;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryAlreadyExistsException;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
-<<<<<<< HEAD
 import com.BESourceryAdmissionTool.category.exceptions.CurrentUserIdNotEqualAuthorIdException;
-=======
 import com.BESourceryAdmissionTool.category.exceptions.CategoryNotFoundException;
->>>>>>> master
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
-<<<<<<< HEAD
 import com.BESourceryAdmissionTool.task.exceptions.UserNotEqualTaskAuthorException;
 import com.BESourceryAdmissionTool.task.exceptions.UserNotLoggedInException;
-=======
 import com.BESourceryAdmissionTool.category.services.mapper.CategoryMapper;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
->>>>>>> master
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
