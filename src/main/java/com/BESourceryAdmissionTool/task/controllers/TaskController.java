@@ -34,7 +34,7 @@ public class TaskController {
 
     @GetMapping
     public List<TaskDto> getAllTasks(@RequestParam(defaultValue = "false") boolean onlyMine,
-                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                                     @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication,
                                      @AuthenticationPrincipal User user) {
 
         return taskService.getAllTasks(user, onlyMine);
