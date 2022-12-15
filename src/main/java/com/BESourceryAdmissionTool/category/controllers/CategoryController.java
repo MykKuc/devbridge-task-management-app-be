@@ -34,7 +34,7 @@ public class CategoryController {
     }
 
     @GetMapping("{id}")
-    public CategoryEditDto getCategory(@PathVariable("id") long id){
+    public CategoryEditDto getCategory(@PathVariable("id") long id) {
         return categoryService.getCategory(id);
     }
 
@@ -46,15 +46,18 @@ public class CategoryController {
 
     @PutMapping("{id}")
     @ResponseStatus(code = HttpStatus.OK, reason = "OK")
-    public void updateCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication , @AuthenticationPrincipal User user,
-                               @PathVariable("id") long id, @Valid @RequestBody CategoryRequest categoryRequest) {
+    public void updateCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                               @AuthenticationPrincipal User user,
+                               @PathVariable("id") long id,
+                               @Valid @RequestBody CategoryRequest categoryRequest) {
         categoryService.updateCategoryService(id, categoryRequest, user);
     }
 
     @PostMapping
-    @ResponseStatus(code=HttpStatus.CREATED, reason = "CREATED")
-    public void createCategory(@Valid @RequestBody CategoryRequest categoryRequest, @RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
-                               @AuthenticationPrincipal User user) throws UnauthorizedExeption {
-        categoryService.createCategoryService(categoryRequest);
+    @ResponseStatus(code = HttpStatus.CREATED, reason = "CREATED")
+    public void createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                               @AuthenticationPrincipal User user,
+                               @Valid @RequestBody CategoryRequest categoryRequest) {
+        categoryService.createCategoryService(categoryRequest, user);
     }
 }
