@@ -37,7 +37,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: role
-                  type: varchar(10)
+                  type: int
                   constraints:
                     nullable: false
         - createTable:
@@ -184,7 +184,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'USER'
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -202,7 +202,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'USER'
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -220,7 +220,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'USER'
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -238,7 +238,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'USER'
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -256,7 +256,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'USER'
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -274,7 +274,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'USER'
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -292,7 +292,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'USER'
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -310,7 +310,7 @@ databaseChangeLog:
                   value: null
               - column:
                   name: role
-                  value: 'ADMIN'
+                  value: 1
         - insert:
             tableName: category
             columns:
