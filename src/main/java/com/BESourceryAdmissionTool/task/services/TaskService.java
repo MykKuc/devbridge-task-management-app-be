@@ -103,6 +103,7 @@ public class TaskService {
         }
 
         answerRepository.deleteAnswersByTask(task.get());
+        taskVoteRepository.deleteTaskVotesByTask(task.get());
         taskRepository.deleteById(id);
     }
 
