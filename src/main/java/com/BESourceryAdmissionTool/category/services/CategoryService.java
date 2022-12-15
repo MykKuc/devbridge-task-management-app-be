@@ -4,14 +4,12 @@ import com.BESourceryAdmissionTool.category.dto.CategoryDto;
 import com.BESourceryAdmissionTool.category.dto.CategoryEditDto;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryAlreadyExistsException;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
-import com.BESourceryAdmissionTool.category.exceptions.CurrentUserIdNotEqualAuthorIdException;
 import com.BESourceryAdmissionTool.category.exceptions.CategoryNotFoundException;
+import com.BESourceryAdmissionTool.category.exceptions.CurrentUserIdNotEqualAuthorIdException;
 import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
-import com.BESourceryAdmissionTool.task.exceptions.UserNotEqualTaskAuthorException;
-import com.BESourceryAdmissionTool.task.exceptions.UserNotLoggedInException;
 import com.BESourceryAdmissionTool.category.services.mapper.CategoryMapper;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
@@ -62,20 +60,18 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public void updateCategoryService(long id, CategoryRequest categoryRequest) {
+    public void updateCategoryService(long id, CategoryRequest categoryRequest, User user) {
         Optional<Category> categoryOption = categoryRepository.findById(id);
         if (categoryOption.isEmpty()) {
             throw new CategoryIdNotExistException(id);
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalEmail = authentication.getName();
-        Optional<User> currentUser = userRepository.findByEmail(currentPrincipalEmail);
-        if(currentUser.isEmpty()){
-            throw new UserNotLoggedInException("No User is logged in at the moment.");
-        }
+        long currentUserId = user.getId();
+        long authorOfCategoryId = categoryOption.get().getAuthor().getId();
 
-        long idOfCurrentUser = currentUser.get().getId();
+        if(currentUserId != authorOfCategoryId){
+            throw new CurrentUserIdNotEqualAuthorIdException("Current user " + user.getName() + " is not the author. " + categoryOption.get().getAuthor().getName() + " is the author.");
+        }
 
         Category category = categoryOption.get();
         Optional<Category> sameName = categoryRepository.findCategoryByName(categoryRequest.getName());

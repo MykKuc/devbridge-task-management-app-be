@@ -1,6 +1,5 @@
 package com.BESourceryAdmissionTool.user.services;
 
-import com.BESourceryAdmissionTool.task.exceptions.UserNotLoggedInException;
 import com.BESourceryAdmissionTool.user.exceptions.UserAlreadyExistsException;
 import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
@@ -8,7 +7,6 @@ import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import com.BESourceryAdmissionTool.user.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -48,20 +46,6 @@ public class UserService {
             throw new UserNotFoundException(id);
         }
         return user;
-    }
-
-    public Optional<User> getCurrentUserByJwtToken(String currentJwtToken, User user) {
-
-        if (currentJwtToken == null) {
-            throw new UserNotLoggedInException("JWT token not provided");
-        }
-
-        Optional<User> currentUser = userRepository.findByToken(currentJwtToken);
-        if (currentUser.isEmpty()) {
-            throw new UserNotLoggedInException("No User with such token or user is not logged in.");
-        }
-
-        return currentUser;
     }
 
     public void createUser(UserRequest userRequest) {

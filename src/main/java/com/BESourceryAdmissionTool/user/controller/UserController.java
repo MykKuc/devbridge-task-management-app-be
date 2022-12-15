@@ -1,12 +1,15 @@
 package com.BESourceryAdmissionTool.user.controller;
 
+import com.BESourceryAdmissionTool.task.dto.UserDto;
 import com.BESourceryAdmissionTool.user.dto.AuthResponse;
+import com.BESourceryAdmissionTool.user.dto.UserMeDto;
 import com.BESourceryAdmissionTool.user.request.LoginRequest;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import com.BESourceryAdmissionTool.user.request.UserRequest;
 import com.BESourceryAdmissionTool.user.security.JwtMaker;
 import com.BESourceryAdmissionTool.user.services.UserService;
+import com.BESourceryAdmissionTool.user.services.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,13 +34,15 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtMaker jwtMaker;
+    private final UserMapper userMapper;
 
 
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtMaker jwtMaker) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtMaker jwtMaker, UserMapper userMapper) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtMaker = jwtMaker;
+        this.userMapper = userMapper;
     }
 
 
@@ -47,9 +52,9 @@ public class UserController {
     }
 
     @GetMapping("me")
-    public Optional<User> getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String currentJwtToken,
-                                         @AuthenticationPrincipal User user){
-        return userService.getCurrentUserByJwtToken(currentJwtToken, user);
+    public UserMeDto getCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                                        @AuthenticationPrincipal User user){
+        return userMapper.mapUser(user);
     }
 
     @PostMapping("login")
