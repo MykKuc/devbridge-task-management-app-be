@@ -15,6 +15,8 @@ import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
+import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
+import com.BESourceryAdmissionTool.task_vote.repositories.TaskVoteRepository;
 import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
@@ -34,23 +36,26 @@ public class TaskService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
+    private final TaskVoteRepository taskVoteRepository;
     private final TaskMapper taskMapper;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, CategoryRepository categoryRepository, UserRepository userRepository, AnswerRepository answerRepository, TaskMapper taskMapper) {
+    public TaskService(TaskRepository taskRepository, TaskVoteRepository taskVoteRepository, CategoryRepository categoryRepository, UserRepository userRepository, AnswerRepository answerRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.answerRepository = answerRepository;
+        this.taskVoteRepository = taskVoteRepository;
         this.taskMapper = taskMapper;
     }
 
-    public Optional<FullTaskDto> getTaskData(long id) {
+    public Optional<FullTaskDto> getTaskData(long id, User user) {
         Optional<Task> task = taskRepository.findTaskById(id);
         if (task.isEmpty()) {
             throw new TaskNotFoundException("Task not found");
         }
-        return task.map(taskMapper::fullTaskMap);
+
+        return task.map(tsk -> taskMapper.fullTaskMap(tsk, checkVote(user, tsk)));
     }
 
     public List<TaskDto> getAllTasks(User user, boolean onlyMine) {
@@ -64,8 +69,9 @@ public class TaskService {
         } else {
             tasks = taskRepository.findAll();
         }
+
         return tasks.stream()
-                .map(taskMapper::taskMap)
+                .map(task -> taskMapper.taskMap(task, checkVote(user, task)))
                 .collect(Collectors.toList());
     }
 
@@ -138,5 +144,14 @@ public class TaskService {
                 .map(tr -> taskMapper.answerMap(tr.getText(), tr.isCorrect(), savedTask))
                 .collect(Collectors.toList());
         answerRepository.saveAll(answers);
+    }
+
+    private boolean checkVote(User user, Task task) {
+        if (user != null && user.getToken() != null)
+        {
+            Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
+            return taskVote.isPresent();
+        }
+        return false;
     }
 }

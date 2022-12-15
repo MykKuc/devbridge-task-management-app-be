@@ -28,8 +28,8 @@ public class TaskController {
     }
 
     @GetMapping("{id}")
-    public Optional<FullTaskDto> getTaskData(@PathVariable("id") Long id) {
-        return taskService.getTaskData(id);
+    public Optional<FullTaskDto> getTaskData(@PathVariable("id") Long id, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication, @AuthenticationPrincipal User user) {
+        return taskService.getTaskData(id, user);
     }
 
     @GetMapping
