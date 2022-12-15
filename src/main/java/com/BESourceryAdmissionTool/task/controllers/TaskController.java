@@ -9,9 +9,6 @@ import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,21 +42,25 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED, reason = "Created")
-    public void createTask(@Valid @RequestBody TaskRequest taskRequest) {
-        taskService.createTask(taskRequest);
+    public void createTask(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                           @AuthenticationPrincipal User user,
+                           @Valid @RequestBody TaskRequest taskRequest) {
+        taskService.createTask(taskRequest, user);
     }
 
     @PutMapping(path ="{id}")
-    public void updateTask(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @AuthenticationPrincipal User user,
+    public void updateTask(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                           @AuthenticationPrincipal User user,
                             @PathVariable("id") long id, @RequestBody UpdateTaskRequest request){
         taskService.updateTask(id, request, user);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT, reason = "Deleted")
-    public void deleteTask(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @AuthenticationPrincipal User user,
-                            @PathVariable("id") Long id) {
-        taskService.deleteTask(id,user);
+    public void deleteTask(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
+                           @AuthenticationPrincipal User user,
+                           @PathVariable("id") Long id) {
+        taskService.deleteTask(id, user);
     }
 
 

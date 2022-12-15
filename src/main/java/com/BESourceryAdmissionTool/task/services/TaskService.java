@@ -18,13 +18,12 @@ import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.task_vote.repositories.TaskVoteRepository;
-import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
+import com.BESourceryAdmissionTool.user.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,16 +35,18 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
     private final TaskVoteRepository taskVoteRepository;
     private final TaskMapper taskMapper;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, TaskVoteRepository taskVoteRepository, CategoryRepository categoryRepository, UserRepository userRepository, AnswerRepository answerRepository, TaskMapper taskMapper) {
+    public TaskService(TaskRepository taskRepository,
+                       TaskVoteRepository taskVoteRepository,
+                       CategoryRepository categoryRepository,
+                       AnswerRepository answerRepository,
+                       TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
         this.answerRepository = answerRepository;
         this.taskVoteRepository = taskVoteRepository;
         this.taskMapper = taskMapper;
@@ -77,7 +78,7 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteTask(long id,User user) {
+    public void deleteTask(long id, User user) {
         Optional<Task> task = taskRepository.findTaskById(id);
         if (task.isEmpty()) {
             throw new TaskNotFoundException("Task not found");
@@ -85,7 +86,7 @@ public class TaskService {
 
         long currentUserId = user.getId();
         long taskAuthorId = task.get().getAuthor().getId();
-        if(currentUserId != taskAuthorId ){
+        if (currentUserId != taskAuthorId && user.getRole() != Role.ADMIN) {
             throw new UserNotEqualTaskAuthorException("Can not delete task. You are not the author of the task.");
         }
 
@@ -93,7 +94,7 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    public void createTask(TaskRequest taskRequest) {
+    public void createTask(TaskRequest taskRequest, User user) {
         Optional<Task> sameTitle = taskRepository.findTaskByTitle(taskRequest.getTitle());
         if (sameTitle.isPresent()) {
             throw new TaskNameAlreadyExistsException(taskRequest.getTitle());
@@ -105,13 +106,7 @@ public class TaskService {
         }
         Category category = categoryOptional.get();
 
-        Optional<User> userOptional = userRepository.findById(1L);
-        if (userOptional.isEmpty()) {
-            throw new UserNotFoundException(1L);
-        }
-        User author = userOptional.get();
-
-        Task task = taskMapper.taskMap(taskRequest, category, author);
+        Task task = taskMapper.taskMap(taskRequest, category, user);
         Task savedTask;
         try {
             savedTask = taskRepository.save(task);
@@ -130,7 +125,7 @@ public class TaskService {
 
         long currentUserId = user.getId();
         long taskAuthorId = primaryTask.get().getAuthor().getId();
-        if( currentUserId != taskAuthorId ){
+        if (currentUserId != taskAuthorId && user.getRole() != Role.ADMIN) {
             throw new UserNotEqualTaskAuthorException("Can not update the task. You are not the author of the task.");
         }
 
@@ -162,8 +157,7 @@ public class TaskService {
     }
 
     private boolean checkVote(User user, Task task) {
-        if (user != null && user.getToken() != null)
-        {
+        if (user != null && user.getToken() != null) {
             Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
             return taskVote.isPresent();
         }

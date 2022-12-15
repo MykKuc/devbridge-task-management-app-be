@@ -1,20 +1,17 @@
 package com.BESourceryAdmissionTool.user.model;
 
 import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
+import com.BESourceryAdmissionTool.user.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +40,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<TaskVote> votes;
+
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
