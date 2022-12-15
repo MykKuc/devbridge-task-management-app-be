@@ -15,6 +15,7 @@ import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
@@ -52,11 +53,29 @@ public class TaskService {
         return task.map(taskMapper::fullTaskMap);
     }
 
-    public List<TaskDto> getAllTasks() {
-        List<Task> tasks = taskRepository.findAll();
+    public List<TaskDto> getAllTasks(User user, String token, boolean onlyMine) {
+        List<Task> tasks;
+        User userChecked = getUser(user, token);
+        if (userChecked == null && onlyMine) {
+            throw new UnauthorizedExeption("User not authorized");
+        }
+
+        if(userChecked == null || !onlyMine){
+            tasks = taskRepository.findAll();
+        }
+        else{
+            tasks = taskRepository.findTasksByAuthorId(userChecked.getId());
+        }
         return tasks.stream()
                 .map(taskMapper::taskMap)
                 .collect(Collectors.toList());
+    }
+
+    public User getUser(User user, String token){
+        if(user != null && (user.getToken() == null || !("Bearer " + user.getToken()).equals(token))){
+            return null;
+        }
+        return user;
     }
 
     public void deleteTask(long id) {
