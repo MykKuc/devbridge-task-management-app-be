@@ -7,24 +7,23 @@ import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
-import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
-import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNameAlreadyExistsException;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.exceptions.UserNotEqualTaskAuthorException;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;
+import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
+import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.task_vote.repositories.TaskVoteRepository;
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,15 +59,27 @@ public class TaskService {
         return task.map(tsk -> taskMapper.fullTaskMap(tsk, checkVote(user, tsk)));
     }
 
-    public List<TaskDto> getAllTasks(User user, boolean onlyMine) {
+    public List<TaskDto> getAllTasks(User user, boolean onlyMine, Long categoryId) {
         List<Task> tasks;
-        if (user == null && onlyMine) {
+        if (user == null && (onlyMine || categoryId != null)) {
             throw new UnauthorizedExeption("User not authorized");
         }
 
-        if (user != null && onlyMine) {
-            tasks = taskRepository.findTasksByAuthorId(user.getId());
-        } else {
+        if (user != null) {
+            if(onlyMine && categoryId != null){
+                tasks = taskRepository.findTaskByAuthorIdAndCategoryId(user.getId(), categoryId);
+            }
+            else if(onlyMine){
+                tasks = taskRepository.findTasksByAuthorId(user.getId());
+            }
+            else if(categoryId != null){
+                tasks = taskRepository.findTaskByCategoryId(categoryId);
+            }
+            else {
+                tasks = taskRepository.findAll();
+            }
+        }
+        else {
             tasks = taskRepository.findAll();
         }
 
@@ -77,7 +88,7 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteTask(long id,User user) {
+    public void deleteTask(long id, User user) {
         Optional<Task> task = taskRepository.findTaskById(id);
         if (task.isEmpty()) {
             throw new TaskNotFoundException("Task not found");
@@ -85,7 +96,7 @@ public class TaskService {
 
         long currentUserId = user.getId();
         long taskAuthorId = task.get().getAuthor().getId();
-        if(currentUserId != taskAuthorId ){
+        if (currentUserId != taskAuthorId) {
             throw new UserNotEqualTaskAuthorException("Can not delete task. You are not the author of the task.");
         }
 
@@ -130,7 +141,7 @@ public class TaskService {
 
         long currentUserId = user.getId();
         long taskAuthorId = primaryTask.get().getAuthor().getId();
-        if( currentUserId != taskAuthorId ){
+        if (currentUserId != taskAuthorId) {
             throw new UserNotEqualTaskAuthorException("Can not update the task. You are not the author of the task.");
         }
 
@@ -162,8 +173,7 @@ public class TaskService {
     }
 
     private boolean checkVote(User user, Task task) {
-        if (user != null && user.getToken() != null)
-        {
+        if (user != null && user.getToken() != null) {
             Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
             return taskVote.isPresent();
         }

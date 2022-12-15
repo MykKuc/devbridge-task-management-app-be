@@ -22,6 +22,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<Task> findTaskById(long id);
     Optional<Task> findTaskByTitle(String title);
     List<Task> findTasksByAuthorId(long authorId);
+    List<Task> findTaskByCategoryId(long categoryId);
+    List<Task> findTaskByAuthorIdAndCategoryId(long authorId, long categoryId);
 
 
 }
