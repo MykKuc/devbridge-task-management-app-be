@@ -12,7 +12,6 @@ import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.services.mapper.CategoryMapper;
 import com.BESourceryAdmissionTool.user.model.User;
-import com.BESourceryAdmissionTool.user.repositories.UserRepository;
 import com.BESourceryAdmissionTool.user.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

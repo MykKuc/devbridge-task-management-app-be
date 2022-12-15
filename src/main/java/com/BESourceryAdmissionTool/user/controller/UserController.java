@@ -1,12 +1,10 @@
 package com.BESourceryAdmissionTool.user.controller;
 
-import com.BESourceryAdmissionTool.task.dto.UserDto;
 import com.BESourceryAdmissionTool.user.dto.AuthResponse;
 import com.BESourceryAdmissionTool.user.dto.UserMeDto;
 import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
-import com.BESourceryAdmissionTool.user.request.LoginRequest;
 import com.BESourceryAdmissionTool.user.model.User;
-import com.BESourceryAdmissionTool.user.repositories.UserRepository;
+import com.BESourceryAdmissionTool.user.request.LoginRequest;
 import com.BESourceryAdmissionTool.user.request.UserRequest;
 import com.BESourceryAdmissionTool.user.security.JwtMaker;
 import com.BESourceryAdmissionTool.user.services.UserService;
@@ -15,19 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController

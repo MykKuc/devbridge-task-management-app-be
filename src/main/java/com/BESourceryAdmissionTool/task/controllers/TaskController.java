@@ -34,11 +34,11 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDto> getAllTasks(@RequestParam(defaultValue = "false") boolean onlyMine,
+    public List<TaskDto> getAllTasks(@RequestParam(defaultValue = "false") boolean onlyMine, @RequestParam(required = false) Long categoryId,
                                      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication,
                                      @AuthenticationPrincipal User user) {
 
-        return taskService.getAllTasks(user, onlyMine);
+        return taskService.getAllTasks(user, onlyMine, categoryId);
     }
 
     @PostMapping
