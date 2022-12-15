@@ -6,6 +6,7 @@ import com.BESourceryAdmissionTool.user.security.JwtMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,10 +45,12 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class).anonymous()
                 .and()
                 .authorizeRequests()
-                .antMatchers( "/categories").permitAll()
+                .antMatchers( HttpMethod.POST, "/categories/**").authenticated()
+                .antMatchers("/tasks/**").authenticated()
                 .antMatchers( "/users/login").permitAll()
-                .antMatchers( "/tasks").permitAll()
-                .antMatchers("/tasks/**").permitAll()
+                .antMatchers( "/users/logout").authenticated()
+                .antMatchers( "/users/**").authenticated()
+                .antMatchers("/tasks/**").authenticated()
                 .anyRequest().permitAll();
 
 

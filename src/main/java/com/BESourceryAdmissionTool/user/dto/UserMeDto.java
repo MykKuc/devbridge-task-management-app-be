@@ -1,7 +1,6 @@
 package com.BESourceryAdmissionTool.user.dto;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.BESourceryAdmissionTool.user.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,4 +11,5 @@ public class UserMeDto {
     private String name;
     private String email;
     private String token;
+    private Role role;
 }

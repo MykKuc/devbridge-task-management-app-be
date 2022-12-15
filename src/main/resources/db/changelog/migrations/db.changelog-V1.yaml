@@ -35,6 +35,11 @@ databaseChangeLog:
                   type: varchar(300)
                   constraints:
                     nullable: true
+              - column:
+                  name: role
+                  type: int
+                  constraints:
+                    nullable: false
         - createTable:
             tableName: category
             columns:
@@ -177,6 +182,9 @@ databaseChangeLog:
               - column:
                   name: token
                   value: null
+              - column:
+                  name: role
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -192,6 +200,9 @@ databaseChangeLog:
               - column:
                   name: token
                   value: null
+              - column:
+                  name: role
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -207,6 +218,9 @@ databaseChangeLog:
               - column:
                   name: token
                   value: null
+              - column:
+                  name: role
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -222,6 +236,9 @@ databaseChangeLog:
               - column:
                   name: token
                   value: null
+              - column:
+                  name: role
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -237,6 +254,9 @@ databaseChangeLog:
               - column:
                   name: token
                   value: null
+              - column:
+                  name: role
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -252,6 +272,9 @@ databaseChangeLog:
               - column:
                   name: token
                   value: null
+              - column:
+                  name: role
+                  value: 0
         - insert:
             tableName: user
             columns:
@@ -267,6 +290,27 @@ databaseChangeLog:
               - column:
                   name: token
                   value: null
+              - column:
+                  name: role
+                  value: 0
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'admin'
+              - column:
+                  name: email
+                  value: 'admin@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+              - column:
+                  name: role
+                  value: 1
         - insert:
             tableName: category
             columns:

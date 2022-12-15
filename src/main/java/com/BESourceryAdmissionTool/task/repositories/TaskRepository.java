@@ -1,10 +1,8 @@
 package com.BESourceryAdmissionTool.task.repositories;
 
-import com.BESourceryAdmissionTool.answer.model.Answer;
-import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.task.model.Task;
+import com.BESourceryAdmissionTool.task.projection.TaskStatistics;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +13,6 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    @Modifying
-    @Query("update Task t set t.title = ?1, t.summary = ?2, t.description = ?3, t.category = ?4, t.answers = ?5")
-    void updateTitleAndSummaryAndDescriptionAndCategoryAndAnswers(String title, String summary, String description, Category category, Answer answers);
 
     Optional<Task> findTaskById(long id);
     Optional<Task> findTaskByTitle(String title);
@@ -25,5 +20,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findTaskByCategoryId(long categoryId);
     List<Task> findTaskByAuthorIdAndCategoryId(long authorId, long categoryId);
 
-
+    @Query("select c.name as category, COUNT(t) as taskCount from Category c left join Task t on t.category.id = c.id group by c.name")
+    List<TaskStatistics> findTaskStatistics();
 }

@@ -11,12 +11,9 @@ import com.BESourceryAdmissionTool.category.projection.CategoryOption;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.category.requests.CategoryRequest;
 import com.BESourceryAdmissionTool.category.services.mapper.CategoryMapper;
-import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
-import com.BESourceryAdmissionTool.user.repositories.UserRepository;
+import com.BESourceryAdmissionTool.user.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,14 +26,12 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
     private final CategoryMapper categoryMapper;
 
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository, CategoryMapper categoryMapper) {
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
         this.categoryMapper = categoryMapper;
     }
 
@@ -69,7 +64,7 @@ public class CategoryService {
         long currentUserId = user.getId();
         long authorOfCategoryId = categoryOption.get().getAuthor().getId();
 
-        if(currentUserId != authorOfCategoryId){
+        if (currentUserId != authorOfCategoryId && user.getRole() != Role.ADMIN) {
             throw new CurrentUserIdNotEqualAuthorIdException("Current user " + user.getName() + " is not the author. " + categoryOption.get().getAuthor().getName() + " is the author.");
         }
 
@@ -89,25 +84,18 @@ public class CategoryService {
     }
 
     @Transactional
-    public void createCategoryService(CategoryRequest categoryRequest) {
+    public void createCategoryService(CategoryRequest categoryRequest, User user) {
         Optional<Category> sameName = categoryRepository.findCategoryByName(categoryRequest.getName());
         if (sameName.isPresent()) {
             throw new CategoryAlreadyExistsException(categoryRequest.getName());
         }
 
-        long authorId = 1; // TODO: should be taken from currently logged in user's id when authentication is created
         Date currentDate = new Date();
-
-        Optional<User> userOptional = userRepository.findById(authorId);
-        if (userOptional.isEmpty()) {
-            throw new UserNotFoundException(authorId);
-        }
-        User author = userOptional.get();
 
         Category category = Category.builder()
                 .name(categoryRequest.getName())
                 .description(categoryRequest.getDescription())
-                .author(author)
+                .author(user)
                 .creationDate(currentDate)
                 .build();
 
