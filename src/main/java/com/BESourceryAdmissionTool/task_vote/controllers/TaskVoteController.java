@@ -23,13 +23,13 @@ public class TaskVoteController {
 
     @PostMapping("{taskId}")
     @ResponseStatus(code = HttpStatus.CREATED, reason = "Created")
-    public void addVote(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @PathVariable("taskId") Long taskId) {
-        taskVoteService.addVote(authentication, taskId);
+    public void addVote(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @AuthenticationPrincipal User user, @PathVariable("taskId") Long taskId) {
+        taskVoteService.addVote(user, taskId);
     }
 
     @DeleteMapping("{taskId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT, reason = "Deleted")
-    public void deleteVote(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @PathVariable("taskId") Long taskId) {
-        taskVoteService.deleteVote(authentication, taskId);
+    public void deleteVote(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @AuthenticationPrincipal User user, @PathVariable("taskId") Long taskId) {
+        taskVoteService.deleteVote(user, taskId);
     }
 }

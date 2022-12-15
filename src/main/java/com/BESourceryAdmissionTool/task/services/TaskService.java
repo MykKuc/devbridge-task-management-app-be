@@ -17,6 +17,7 @@ import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.mapper.TaskMapper;
 import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.task_vote.repositories.TaskVoteRepository;
+import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.exceptions.UserNotFoundException;
 import com.BESourceryAdmissionTool.user.model.User;
 import com.BESourceryAdmissionTool.user.repositories.UserRepository;
@@ -48,46 +49,20 @@ public class TaskService {
         this.taskMapper = taskMapper;
     }
 
-    public Optional<FullTaskDto> getTaskData(long id, String token) {
+    public Optional<FullTaskDto> getTaskData(long id, User user) {
         Optional<Task> task = taskRepository.findTaskById(id);
         if (task.isEmpty()) {
             throw new TaskNotFoundException("Task not found");
         }
 
-        Optional<FullTaskDto> fullTaskDto = task.map(taskMapper::fullTaskMap);
-        if (token != null) {
-            if (fullTaskDto.isPresent()) {
-                Optional<User> user = userRepository.findByToken(token);
-                if (user.isPresent()) {
-                    Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task.get(), user.get());
-                    if (taskVote.isPresent()) {
-                        fullTaskDto.get().setVoted(true);
-                    }
-                }
-            }
-        }
-        return fullTaskDto;
+        return task.map(tsk -> taskMapper.fullTaskMap(tsk, checkVote(user, tsk)));
     }
 
-    public List<TaskDto> getAllTasks(String token) {
+    public List<TaskDto> getAllTasks(User user) {
         List<Task> tasks = taskRepository.findAll();
         List<TaskDto> list = tasks.stream()
-                .map(taskMapper::taskMap)
+                .map(task -> taskMapper.taskMap(task, checkVote(user, task)))
                 .collect(Collectors.toList());
-        if (token != null) {
-            Optional<User> user = userRepository.findByToken(token);
-            if (user.isPresent()) {
-                for (TaskDto taskDto : list) {
-                    Optional<Task> task = taskRepository.findTaskById(taskDto.getId());
-                    if (task.isPresent()) {
-                        Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task.get(), user.get());
-                        if (taskVote.isPresent()) {
-                            taskDto.setVoted(true);
-                        }
-                    }
-                }
-            }
-        }
         return list;
     }
 
@@ -160,5 +135,16 @@ public class TaskService {
                 .map(tr -> taskMapper.answerMap(tr.getText(), tr.isCorrect(), savedTask))
                 .collect(Collectors.toList());
         answerRepository.saveAll(answers);
+    }
+
+    private boolean checkVote(User user, Task task) {
+        if (user != null && user.getToken() != null)
+        {
+            Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
+            if (taskVote.isPresent()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

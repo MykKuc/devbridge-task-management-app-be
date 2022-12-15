@@ -5,9 +5,11 @@ import com.BESourceryAdmissionTool.task.dto.TaskDto;
 import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
+import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +32,13 @@ public class TaskController {
     }
 
     @GetMapping("{id}")
-    public Optional<FullTaskDto> getTaskData(@PathVariable("id") Long id, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication) {
-        return taskService.getTaskData(id, authentication);
+    public Optional<FullTaskDto> getTaskData(@PathVariable("id") Long id, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication, @AuthenticationPrincipal User user) {
+        return taskService.getTaskData(id, user);
     }
 
     @GetMapping
-    public List<TaskDto> getAllTasks(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication) {
-        return taskService.getAllTasks(authentication);
+    public List<TaskDto> getAllTasks(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication, @AuthenticationPrincipal User user) {
+        return taskService.getAllTasks(user);
     }
 
     @PostMapping

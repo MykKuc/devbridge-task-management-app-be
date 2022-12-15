@@ -31,13 +31,11 @@ public class TaskVoteService {
         this.taskVoteRepository = taskVoteRepository;
     }
 
-    public void addVote (String token, Long taskId) {
-        Optional<User> optionalUser = userRepository.findByToken(token);
-        if (optionalUser.isEmpty()) {
-            throw new UnauthorizedExeption("User must be logged in to vote");
+    public void addVote (User user, Long taskId) {
+        if (user == null || user.getToken() == null) {
+            throw new UnauthorizedExeption("You are not logged in");
         }
-        User user = optionalUser.get();
-        
+
         Optional<Task> optionalTask = taskRepository.findTaskById(taskId);
         if (optionalTask.isEmpty()) {
             throw new TaskNotFoundException("Task with the following id is not found: " + taskId);
@@ -56,12 +54,10 @@ public class TaskVoteService {
         taskVoteRepository.save(taskVote);
     }
 
-    public void deleteVote (String token, Long taskId) {
-        Optional<User> optionalUser = userRepository.findByToken(token);
-        if (optionalUser.isEmpty()) {
-            throw new UnauthorizedExeption("User must be logged in to vote");
+    public void deleteVote (User user, Long taskId) {
+        if (user == null || user.getToken() == null) {
+            throw new UnauthorizedExeption("You are not logged in");
         }
-        User user = optionalUser.get();
 
         Optional<Task> optionalTask = taskRepository.findTaskById(taskId);
         if (optionalTask.isEmpty()) {

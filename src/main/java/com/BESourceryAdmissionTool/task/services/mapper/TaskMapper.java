@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Component
 public class TaskMapper {
-    public TaskDto taskMap(Task task){
+    public TaskDto taskMap(Task task, boolean voted){
         return new TaskDto(
                 task.getId(),
                 task.getTitle(),
@@ -25,7 +25,7 @@ public class TaskMapper {
                 task.getVotes().size(),
                 task.getAuthor().getName(),
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName()),
-                false
+                voted
         );
     }
 
@@ -42,7 +42,7 @@ public class TaskMapper {
                 .build();
     }
 
-    public FullTaskDto fullTaskMap(Task task) {
+    public FullTaskDto fullTaskMap(Task task, boolean voted) {
         return new FullTaskDto(
                 task.getId(),
                 task.getTitle(),
@@ -53,7 +53,7 @@ public class TaskMapper {
                 new UserDto(task.getAuthor().getId(), task.getAuthor().getName()),
                 new CategoryDto(task.getCategory().getId(), task.getCategory().getName()),
                 task.getAnswers(),
-                false
+                voted
         );
     }
 
