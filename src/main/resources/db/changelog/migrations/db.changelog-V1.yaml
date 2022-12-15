@@ -294,6 +294,24 @@ databaseChangeLog:
                   name: role
                   value: 'USER'
         - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: name
+                  value: 'admin'
+              - column:
+                  name: email
+                  value: 'admin@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$12$VlHaAFlC13S3MsRrXyYMnuxYUDkyAK644qkNNACQVVHHQduMiOpNK'
+              - column:
+                  name: token
+                  value: null
+              - column:
+                  name: role
+                  value: 'ADMIN'
+        - insert:
             tableName: category
             columns:
               - column:
