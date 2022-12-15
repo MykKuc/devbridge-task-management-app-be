@@ -39,6 +39,14 @@ public class UserService {
         user.setToken(null);
         userRepository.save(user);
     }
+    public void checkUser(User user, String token){
+        if (user == null ) {
+            throw new UnauthorizedExeption("User is null");
+        }
+        else if (!token.equals("Bearer "+user.getToken())){
+            throw new UnauthorizedExeption("Wrong user");
+        }
+    }
 
     public Optional<User> getUser(long id) {
         Optional<User> user = userRepository.findById(id);

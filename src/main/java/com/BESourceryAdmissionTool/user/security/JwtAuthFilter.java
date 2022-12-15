@@ -28,14 +28,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
         String token = getJWTFromRequest(request);
         if(StringUtils.hasText(token) && tokenMaker.validateToken(token)) {
             String email = tokenMaker.getUsernameFromJWT(token);
 
             Optional<User> user = this.userRepository.findByEmail(email);
             if (user.isEmpty()) {
-                throw new UnauthorizedExeption("User does not exist");
+                throw new UnauthorizedExeption("User not exist");
             }
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.get(), null,
                     user.get().getAuthorities());
