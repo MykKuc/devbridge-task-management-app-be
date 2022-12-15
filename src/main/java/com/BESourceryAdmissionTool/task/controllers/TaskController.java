@@ -3,18 +3,14 @@ package com.BESourceryAdmissionTool.task.controllers;
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
 import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
+import com.BESourceryAdmissionTool.task.projection.TaskStatistics;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
-import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
-import com.BESourceryAdmissionTool.user.exceptions.UnauthorizedExeption;
 import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -68,5 +64,9 @@ public class TaskController {
         taskService.deleteTask(id, user);
     }
 
+    @GetMapping("statistics")
+    public List<TaskStatistics> getTaskData() {
+        return taskService.getTaskStatistics();
+    }
 
 }

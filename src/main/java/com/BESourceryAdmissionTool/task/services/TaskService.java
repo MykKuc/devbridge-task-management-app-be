@@ -7,6 +7,7 @@ import com.BESourceryAdmissionTool.category.model.Category;
 import com.BESourceryAdmissionTool.category.repositories.CategoryRepository;
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
+import com.BESourceryAdmissionTool.task.projection.TaskStatistics;
 import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
 import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNameAlreadyExistsException;
@@ -147,6 +148,10 @@ public class TaskService {
 
         Task savedTask = taskRepository.save(task);
         addAnswersForTask(request.getAnswers(), savedTask);
+    }
+
+    public List<TaskStatistics> getTaskStatistics() {
+        return taskRepository.findTaskStatistics();
     }
 
     private void addAnswersForTask(List<AnswerRequest> answerRequest, Task savedTask) {
