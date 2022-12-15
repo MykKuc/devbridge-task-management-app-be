@@ -60,12 +60,21 @@ public class TaskService {
         return task.map(tsk -> taskMapper.fullTaskMap(tsk, checkVote(user, tsk)));
     }
 
-    public List<TaskDto> getAllTasks(User user) {
-        List<Task> tasks = taskRepository.findAll();
-        List<TaskDto> list = tasks.stream()
+    public List<TaskDto> getAllTasks(User user, boolean onlyMine) {
+        List<Task> tasks;
+        if (user == null && onlyMine) {
+            throw new UnauthorizedExeption("User not authorized");
+        }
+
+        if (user != null && onlyMine) {
+            tasks = taskRepository.findTasksByAuthorId(user.getId());
+        } else {
+            tasks = taskRepository.findAll();
+        }
+
+        return tasks.stream()
                 .map(task -> taskMapper.taskMap(task, checkVote(user, task)))
                 .collect(Collectors.toList());
-        return list;
     }
 
     public void deleteTask(long id,User user) {
@@ -156,9 +165,7 @@ public class TaskService {
         if (user != null && user.getToken() != null)
         {
             Optional<TaskVote> taskVote = taskVoteRepository.findTaskVoteByTaskAndUser(task, user);
-            if (taskVote.isPresent()) {
-                return true;
-            }
+            return taskVote.isPresent();
         }
         return false;
     }

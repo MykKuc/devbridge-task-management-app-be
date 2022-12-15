@@ -1,6 +1,5 @@
 package com.BESourceryAdmissionTool.task_vote.services;
 
-import com.BESourceryAdmissionTool.category.exceptions.CategoryIdNotExistException;
 import com.BESourceryAdmissionTool.task.exceptions.TaskNotFoundException;
 import com.BESourceryAdmissionTool.task.model.Task;
 import com.BESourceryAdmissionTool.task.repositories.TaskRepository;

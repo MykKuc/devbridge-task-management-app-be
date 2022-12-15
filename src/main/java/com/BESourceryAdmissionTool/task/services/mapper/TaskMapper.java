@@ -2,12 +2,12 @@ package com.BESourceryAdmissionTool.task.services.mapper;
 
 import com.BESourceryAdmissionTool.answer.model.Answer;
 import com.BESourceryAdmissionTool.category.model.Category;
-import com.BESourceryAdmissionTool.task.dto.*;
+import com.BESourceryAdmissionTool.task.dto.CategoryDto;
+import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
+import com.BESourceryAdmissionTool.task.dto.TaskDto;
+import com.BESourceryAdmissionTool.task.dto.UserDto;
 import com.BESourceryAdmissionTool.task.model.Task;
-import com.BESourceryAdmissionTool.task.requests.AnswerRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
-import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
-import com.BESourceryAdmissionTool.task_vote.model.TaskVote;
 import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.stereotype.Component;
 

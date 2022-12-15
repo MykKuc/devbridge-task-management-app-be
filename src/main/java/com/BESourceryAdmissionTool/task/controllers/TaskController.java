@@ -2,8 +2,8 @@ package com.BESourceryAdmissionTool.task.controllers;
 
 import com.BESourceryAdmissionTool.task.dto.FullTaskDto;
 import com.BESourceryAdmissionTool.task.dto.TaskDto;
-import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.requests.TaskRequest;
+import com.BESourceryAdmissionTool.task.requests.UpdateTaskRequest;
 import com.BESourceryAdmissionTool.task.services.TaskService;
 import com.BESourceryAdmissionTool.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -40,8 +36,11 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDto> getAllTasks(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication, @AuthenticationPrincipal User user) {
-        return taskService.getAllTasks(user);
+    public List<TaskDto> getAllTasks(@RequestParam(defaultValue = "false") boolean onlyMine,
+                                     @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authentication,
+                                     @AuthenticationPrincipal User user) {
+
+        return taskService.getAllTasks(user, onlyMine);
     }
 
     @PostMapping
