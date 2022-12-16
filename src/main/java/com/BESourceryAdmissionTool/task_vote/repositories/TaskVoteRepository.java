@@ -14,4 +14,5 @@ import java.util.Optional;
 @Transactional
 public interface TaskVoteRepository extends JpaRepository<TaskVote, Long> {
     Optional<TaskVote> findTaskVoteByTaskAndUser(Task task, User user);
+    void deleteTaskVotesByTask(Task task);
 }
