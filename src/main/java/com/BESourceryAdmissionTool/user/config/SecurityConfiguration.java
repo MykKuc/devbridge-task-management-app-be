@@ -45,6 +45,8 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class).anonymous()
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/tasks/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/categories").permitAll()
                 .antMatchers( HttpMethod.POST, "/categories/**").authenticated()
                 .antMatchers("/tasks/**").authenticated()
                 .antMatchers( "/users/login").permitAll()
