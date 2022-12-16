@@ -25,8 +25,7 @@ public class TaskRequest {
     @Length(min = 1, message = "Description must be at least 1 character")
     private String description;
 
-    @Nullable
-    @Length(min = 1, max = 100, message = "Summary must contain at least 1 non-whitespace character and cannot be over 100 characters")
+    @Length(max = 100, message = "Summary cannot be over 100 characters")
     private String summary;
 
     // custom summary setter for validation
