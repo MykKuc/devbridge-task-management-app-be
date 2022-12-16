@@ -17,6 +17,6 @@ public class CategoryRequest {
     private String name;
 
     @NotBlank(message = "Description must not be null and must contain at least one non-whitespace character")
-    @Length(min = 10, max = 200, message = "Description must be between 10 and 200 characters")
+    @Length(min = 1, max = 200, message = "Description must be between 1 and 200 characters")
     private String description;
 }
